@@ -46,7 +46,7 @@ export default function EventSpotlight() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="lg:col-span-3 flex flex-col gap-6"
+            className="lg:col-span-3 flex flex-col gap-6 min-w-0"
           >
             <div>
               <p className="section-label mb-3">Upcoming</p>
