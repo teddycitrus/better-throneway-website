@@ -25,10 +25,10 @@ const config: Config = {
         muted: "#8A8A9A",         // secondary text
       },
       fontFamily: {
-        cormorant: ["var(--font-cormorant)", "Georgia", "serif"],
-        lora: ["var(--font-lora)", "Georgia", "serif"],
-        instrument: ["var(--font-instrument)", "system-ui", "sans-serif"],
-        nunito: ["var(--font-nunito)", "system-ui", "sans-serif"],
+        cormorant: ["Cormorant Garamond", "Georgia", "serif"],
+        lora: ["Lora", "Georgia", "serif"],
+        instrument: ["Instrument Sans", "system-ui", "sans-serif"],
+        nunito: ["Nunito", "system-ui", "sans-serif"],
       },
       keyframes: {
         "glow-pulse": {

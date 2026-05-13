@@ -59,7 +59,7 @@
   .text-balance { text-wrap: balance; }
 
   .section-label {
-    font-family: var(--font-instrument), system-ui, sans-serif;
+    font-family: "Instrument Sans", system-ui, sans-serif;
     font-size: 0.7rem;
     font-weight: 600;
     letter-spacing: 0.22em;
@@ -83,7 +83,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-family: var(--font-instrument), system-ui, sans-serif;
+    font-family: "Instrument Sans", system-ui, sans-serif;
     font-size: 0.7rem;
     font-weight: 600;
     letter-spacing: 0.18em;
@@ -103,7 +103,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-family: var(--font-instrument), system-ui, sans-serif;
+    font-family: "Instrument Sans", system-ui, sans-serif;
     font-size: 0.7rem;
     font-weight: 500;
     letter-spacing: 0.18em;
