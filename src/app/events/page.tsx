@@ -71,7 +71,7 @@ export default function EventsPage() {
               <span style={{ color: '#B537F2' }}>comes alive.</span>
             </h1>
             <p className="font-instrument text-cream/60 text-lg mt-6 max-w-xl leading-relaxed">
-              From weekly gatherings to large-scale conferences, every Throneway event is designed to bring you deeper — in worship, in community, and in faith.
+              From weekly gatherings to large-scale conferences, every Throneway event is designed to bring you deeper - in worship, in community, and in faith.
             </p>
           </motion.div>
         </div>
@@ -106,7 +106,7 @@ export default function EventsPage() {
             transition={{ duration: 0.7 }}
             className="mb-14"
           >
-            <p className="section-label mb-3">Upcoming</p>
+            <p className="section-label mb-3">Ongoing</p>
             <h2 className="font-nunito font-extrabold text-white-soft leading-none" style={{ fontSize: 'clamp(2.4rem, 5vw, 4rem)' }}>
               Regular Gatherings
             </h2>
@@ -238,8 +238,42 @@ export default function EventsPage() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="font-instrument text-sm text-muted mt-8 text-center"
           >
-            More events announced throughout the year — follow us on Instagram to stay updated.
+            More events announced throughout the year - follow us on Instagram to stay updated.
           </motion.p>
+        </div>
+      </section>
+
+      {/* ── Upcoming Events ── */}
+      <section className="relative py-20 lg:py-24 overflow-hidden" style={{ background: '#0d0018' }}>
+        <div className="absolute inset-x-0 top-0 h-px" style={{ background: 'linear-gradient(to right, transparent, rgba(181,55,242,0.2), transparent)' }} />
+        <div className="absolute inset-x-0 bottom-0 h-px" style={{ background: 'linear-gradient(to right, transparent, rgba(181,55,242,0.1), transparent)' }} />
+
+        <div className="relative max-w-[1280px] mx-auto px-5 sm:px-8 lg:px-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="mb-10"
+          >
+            <p className="section-label mb-3">Upcoming</p>
+            <h2 className="font-nunito font-extrabold text-white-soft leading-none" style={{ fontSize: 'clamp(2.4rem, 5vw, 4rem)' }}>
+              Next Events
+            </h2>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="py-16 text-center rounded-sm"
+            style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}
+          >
+            <p className="font-instrument text-cream/30 text-sm tracking-[0.06em]">
+              Nothing scheduled right now - follow us on Instagram to be the first to know.
+            </p>
+          </motion.div>
         </div>
       </section>
 

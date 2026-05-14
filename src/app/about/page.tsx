@@ -12,12 +12,6 @@ const ASSOCIATIONS = [
   { name: 'Office of Catholic Youth', logo: '/logos/ocy_transparent.png', href: 'https://ocytoronto.org/', className: '' },
 ]
 
-const PILLARS_SUMMARY = [
-  { icon: '🎶', label: 'Music' },
-  { icon: '🎨', label: 'Visual Art' },
-  { icon: '📸', label: 'Digital Media' },
-  { icon: '🕊️', label: 'Live Events' },
-]
 
 export default function AboutPage() {
   return (
@@ -48,7 +42,7 @@ export default function AboutPage() {
               <span style={{ color: '#B537F2' }}>worship.</span>
             </h1>
             <p className="font-instrument text-cream/60 text-lg leading-relaxed">
-              Throneway is a Catholic outreach ministry of Jesus Youth Canada — a community of young artists, musicians, and creatives united by the conviction that beauty leads to God.
+              Throneway is a Catholic outreach ministry of Jesus Youth Canada - a community of young artists, musicians, and creatives united by the conviction that beauty leads to God.
             </p>
           </motion.div>
         </div>
@@ -61,7 +55,7 @@ export default function AboutPage() {
         <div className="max-w-[1280px] mx-auto px-5 sm:px-8 lg:px-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
-            {/* Left — Text */}
+            {/* Left -Text */}
             <motion.div
               initial={{ opacity: 0, x: -24 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -82,29 +76,16 @@ export default function AboutPage() {
 
               <div className="flex flex-col gap-4">
                 <p className="font-instrument text-void/70 leading-relaxed text-base lg:text-lg">
-                  We believe the arts are not decoration — they are proclamation. Every song, every image, every gathering is an act of worship: a declaration that God is worthy, and that beauty is one of his most potent languages.
+                  We believe the arts are not decoration - they are proclamation. Every song, every image, every gathering is an act of worship: a declaration that God is worthy, and that beauty is one of his most potent languages.
                 </p>
                 <p className="font-instrument text-void/55 leading-relaxed text-base lg:text-lg">
-                  Based in Toronto, we operate through music, visual art, digital media, and live events — always aimed at one thing: helping young people encounter the living God.
+                  Based in Toronto, we operate through music, visual art, digital media, and live events - always aimed at one thing: helping young people encounter the living God.
                 </p>
               </div>
 
-              {/* Arts mediums */}
-              <div className="grid grid-cols-2 gap-3">
-                {PILLARS_SUMMARY.map(({ icon, label }) => (
-                  <div
-                    key={label}
-                    className="flex items-center gap-3 py-3 px-4 rounded-sm"
-                    style={{ background: 'rgba(181,55,242,0.06)', border: '1px solid rgba(181,55,242,0.15)' }}
-                  >
-                    <span className="text-lg">{icon}</span>
-                    <span className="font-instrument text-sm tracking-[0.06em] text-void/70">{label}</span>
-                  </div>
-                ))}
-              </div>
             </motion.div>
 
-            {/* Right — Photo */}
+            {/* Right -Photo */}
             <motion.div
               initial={{ opacity: 0, x: 24 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -173,19 +154,19 @@ export default function AboutPage() {
               {
                 year: '2022',
                 title: 'Renewal',
-                body: "It began with one question: what if we gathered young Catholics in Toronto for a full day of worship, art, and prayer? Throneway '22: Renewal brought hundreds together at Noble Hall in Oakville — Holy Mass, live music with Steadfast Worship, a keynote from Fr. Kevin Belgrave, a \"Youth Revival\" panel, and an art showcase celebrating the gifts of the Holy Spirit. That day became the seed of everything that followed.",
+                body: "It began with one question: what if we gathered young Catholics in Toronto for a full day of worship, art, and prayer? Throneway '22: Renewal brought hundreds together at Noble Hall in Oakville - Holy Mass, live music with Steadfast Worship, a keynote from Fr. Kevin Belgrave, a \"Youth Revival\" panel, and an art showcase celebrating the gifts of the Holy Spirit. That day became the seed of everything that followed.",
                 accent: '#B537F2',
               },
               {
                 year: 'Ongoing',
                 title: 'Throneway Heights',
-                body: "After Renewal, the question became: how do we keep this community alive? Heights was the answer — a recurring gathering every other Friday at St. Gregory's Parish in Etobicoke. Praise and worship, faith talks, adoration, and the kind of fellowship that sustains you through the week. A home for young adults who want more from their faith.",
+                body: "After Renewal, the question became: how do we keep this community alive? Heights was the answer - a recurring gathering every other Friday at St. Gregory's Parish in Etobicoke. Praise and worship, faith talks, adoration, and the kind of fellowship that sustains you through the week. A home for young adults who want more from their faith.",
                 accent: '#67C8FC',
               },
               {
                 year: '2024',
                 title: 'Running',
-                body: 'Throneway stepped into the recording studio and released our debut single — \"Running.\" A declaration of pursuit, surrender, and faith in motion. Now streaming on Spotify, Apple Music, YouTube Music, and beyond. The arts becoming proclamation, exactly as we always believed they could.',
+                body: 'Throneway stepped into the recording studio and released our debut single - \"Running.\" A declaration of pursuit, surrender, and faith in motion. Now streaming on Spotify, Apple Music, YouTube Music, and beyond. The arts becoming proclamation, exactly as we always believed they could.',
                 accent: '#C4973A',
               },
             ].map((card, i) => (
@@ -223,7 +204,7 @@ export default function AboutPage() {
               className="font-cormorant italic text-cream/80 leading-snug"
               style={{ fontSize: 'clamp(1.5rem, 3vw, 2.2rem)' }}
             >
-              &ldquo;Beauty is not a luxury for the Church — it is a language. And we intend to speak it.&rdquo;
+              &ldquo;Beauty is not a luxury for the Church - it is a language. And we intend to speak it.&rdquo;
             </p>
           </motion.div>
         </div>

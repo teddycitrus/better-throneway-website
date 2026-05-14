@@ -98,7 +98,7 @@ export default function ContactPage() {
               Get in Touch
             </h1>
             <p className="font-instrument text-cream/60 text-lg leading-relaxed max-w-xl">
-              Whether you have a question, want to get involved, or just want to say hello — we&apos;d love to hear from you.
+              Whether you have a question, want to get involved, or just want to say hello - we&apos;d love to hear from you.
             </p>
           </motion.div>
         </div>

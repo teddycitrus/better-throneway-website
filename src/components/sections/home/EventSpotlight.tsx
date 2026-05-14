@@ -49,7 +49,7 @@ export default function EventSpotlight() {
             className="lg:col-span-3 flex flex-col gap-6 min-w-0"
           >
             <div>
-              <p className="section-label mb-3">Upcoming</p>
+              <p className="section-label mb-3">Ongoing</p>
               <h2 className="font-nunito font-extrabold text-white-soft leading-none" style={{ fontSize: 'clamp(2.5rem, 6vw, 4.5rem)' }}>
                 {event.title}
               </h2>

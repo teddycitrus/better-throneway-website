@@ -41,7 +41,7 @@ export default function WhoWeAre() {
                 Throneway is a Catholic outreach ministry of Jesus Youth Canada dedicated to building a culture of worship through the arts. Through music, visual art, digital media, and live events, we strive to proclaim the Kingdom of God and build a community united in faith.
               </p>
               <p className="font-instrument text-void/55 leading-relaxed text-base lg:text-lg">
-                Based in Toronto, we&apos;ve held Catholic conferences, praise and worship concerts, adoration nights, and collaborated with ministries across the Archdiocese — all united by the conviction that beauty leads to God.
+                Based in Toronto, we&apos;ve held Catholic conferences, praise and worship concerts, adoration nights, and collaborated with ministries across the Archdiocese - all united by the conviction that beauty leads to God.
               </p>
             </div>
 

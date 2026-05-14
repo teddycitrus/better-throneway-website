@@ -7,23 +7,24 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { RUNNING_SINGLE } from '@/lib/constants'
 
 const HERO_IMAGES = [
-  { src: '/photos/Image.170.JPG', alt: 'Community worshipping together' },
-  { src: '/photos/Image.400.JPG', alt: 'Priest raising the monstrance — starburst of light' },
-  { src: '/photos/Image.349.JPG', alt: 'Eucharistic adoration' },
   { src: '/photos/Image.257.JPG', alt: 'Congregation in worship, blue light' },
+  { src: '/photos/Image.400.JPG', alt: 'Priest raising the monstrance, starburst of light' },
+  { src: '/photos/Image.170.JPG', alt: 'Community worshipping together' },
+  { src: '/photos/Image.349.JPG', alt: 'Eucharistic adoration' },
   { src: '/photos/Image.117.JPG', alt: 'Guitarist performing on stage' },
   { src: '/photos/Image.126.JPG', alt: 'Throneway band performing on stage' },
 ]
 
 export default function HeroSection() {
   const [current, setCurrent] = useState(0)
+  const [timerKey, setTimerKey] = useState(0)
 
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrent((i) => (i + 1) % HERO_IMAGES.length)
     }, 5500)
     return () => clearInterval(timer)
-  }, [])
+  }, [timerKey])
 
   return (
     <section className="relative w-full h-[100svh] min-h-[640px] flex items-center justify-center overflow-hidden">
@@ -141,7 +142,7 @@ export default function HeroSection() {
         {HERO_IMAGES.map((_, i) => (
           <button
             key={i}
-            onClick={() => setCurrent(i)}
+            onClick={() => { setCurrent(i); setTimerKey((k) => k + 1) }}
             aria-label={`Go to slide ${i + 1}`}
             className={`transition-all duration-500 rounded-full ${
               i === current

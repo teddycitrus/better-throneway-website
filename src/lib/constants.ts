@@ -20,7 +20,7 @@ export const RUNNING_SINGLE: SingleRelease = {
   artist: 'Throneway',
   spotifyUrl: 'https://open.spotify.com/artist/52QRkOMy637alursB1Qybs?si=iBNtDDbTSYmS4m5ehM9UZQ',
   spotifyEmbedUrl: 'https://open.spotify.com/embed/track/22oYDCJVaABHguR5BaJPwJ',
-  description: 'Our debut single — a declaration of pursuit, surrender, and faith in motion.',
+  description: 'Our debut single - a declaration of pursuit, surrender, and faith in motion.',
 }
 
 export const DONATE_URL = 'https://jycanada.breezechms.com/give/online?fund_id=2286215'
@@ -70,7 +70,7 @@ export const UPCOMING_EVENTS: Event[] = [
     title: 'Throneway Heights',
     subtitle: 'Catholic Young Adult Gathering',
     description:
-      'An immersive evening of praise & worship, faith talks, prayer, and community — designed for young adults who want more in their faith life. Expect live music, amazing speakers, and the kind of fellowship that lasts.',
+      'An immersive evening of praise & worship, faith talks, prayer, and community - designed for young adults who want more in their faith life. Expect live music, amazing speakers, and the kind of fellowship that lasts.',
     location: "St. Gregory's Parish, Etobicoke",
     schedule: 'Every other Friday, 7–9 PM',
     ageGroup: '18+',
@@ -82,16 +82,16 @@ export const PAST_EVENTS: PastEvent[] = [
   {
     title: 'Throneway \'22: Renewal',
     year: '2022',
-    description: 'A conference bringing together hundreds across Toronto for worship, art, and community — the event where Throneway began.',
+    description: 'A conference bringing together hundreds across Toronto for worship, art, and community - the event where Throneway began.',
     photos: ['/photos/Image.360.JPG', '/photos/Image.380.JPG'],
     location: 'Noble Hall, Oakville, Ontario',
     time: '2 PM – 7 PM',
     scripture: { text: 'Iron sharpens iron, and one man sharpens another.', reference: 'Proverbs 27:17' },
     program: ['Art Showcase', 'Holy Mass', 'Keynote', 'Talk Show', 'Adoration', 'Concert Worship', 'Fellowship'],
     speakers: [
-      { name: 'Fr. Kevin Belgrave', role: 'Keynote — Director, Institute of Theology at St. Augustine\'s Seminary' },
-      { name: 'Steadfast Worship', role: 'Concert Worship — Young adults band from the Archdiocese of Toronto' },
-      { name: 'Fr. Peter Bisonnette', role: 'Panel Host — "Youth Revival" discussion on young adult ministry' },
+      { name: 'Fr. Kevin Belgrave', role: 'Keynote - Director, Institute of Theology at St. Augustine\'s Seminary' },
+      { name: 'Steadfast Worship', role: 'Concert Worship - Young adults band from the Archdiocese of Toronto' },
+      { name: 'Fr. Peter Bisonnette', role: 'Panel Host - "Youth Revival" discussion on young adult ministry' },
     ],
   },
 ]

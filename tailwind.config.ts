@@ -28,7 +28,7 @@ const config: Config = {
         cormorant: ["Cormorant Garamond", "Georgia", "serif"],
         lora: ["Lora", "Georgia", "serif"],
         instrument: ["Instrument Sans", "system-ui", "sans-serif"],
-        nunito: ["Nunito", "system-ui", "sans-serif"],
+        nunito: ["Inter", "system-ui", "sans-serif"],
       },
       keyframes: {
         "glow-pulse": {
