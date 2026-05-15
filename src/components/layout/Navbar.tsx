@@ -101,7 +101,8 @@ export default function Navbar() {
                 href={DONATE_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hidden sm:inline-flex btn-primary text-[10px] px-5 py-2.5 tracking-[0.2em]"
+                className="hidden sm:inline-flex items-center font-instrument text-[10px] font-semibold uppercase tracking-[0.2em] px-5 py-2.5 text-white-soft transition-colors duration-300 hover:bg-purple-vivid hover:border-purple-vivid"
+                style={{ border: '1px solid rgba(245,240,232,0.4)' }}
               >
                 Donate
               </a>
@@ -155,7 +156,7 @@ export default function Navbar() {
             href={DONATE_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-primary text-center"
+            className="inline-flex items-center justify-center text-center font-instrument text-xs font-semibold uppercase tracking-[0.18em] py-4 text-ink bg-white-soft transition-colors duration-300 hover:bg-purple-vivid hover:text-white"
           >
             Donate
           </a>

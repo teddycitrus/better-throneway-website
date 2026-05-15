@@ -1,16 +1,12 @@
 'use client'
 
-import { useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { motion, useScroll, useTransform } from 'framer-motion'
-import { MapPin, Clock, Users, Calendar, ArrowRight } from 'lucide-react'
-import Reveal from '@/components/ui/Reveal'
+import { motion } from 'framer-motion'
+import Reveal, { ImageReveal } from '@/components/ui/Reveal'
 import { UPCOMING_EVENTS, PAST_EVENTS, SOCIAL_LINKS } from '@/lib/constants'
 
-const NAVY = '#0a1628'
-const BLUE_MID = '#0d2241'
-const MAYA = '#67C8FC'
+const EASE = [0.22, 1, 0.36, 1] as const
 
 function SocialIcon({ icon }: { icon: string }) {
   if (icon === 'instagram') return (
@@ -43,286 +39,245 @@ function SocialIcon({ icon }: { icon: string }) {
   return null
 }
 
-function EventsHero() {
-  const ref = useRef<HTMLElement>(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
-  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '24%'])
-  const bgScale = useTransform(scrollYProgress, [0, 1], [1.08, 1.2])
-  const contentY = useTransform(scrollYProgress, [0, 1], ['0%', '-18%'])
-
+function SectionHeader({ index, kicker, tag, dark }: { index: string; kicker: string; tag: string; dark: boolean }) {
+  const line = dark ? 'rgba(245,240,232,0.18)' : 'rgba(22,21,24,0.2)'
+  const idx = dark ? 'text-cream/20' : 'text-ink/25'
+  const kick = dark ? 'text-cream/55' : 'text-ink/60'
+  const tg = dark ? 'text-cream/35' : 'text-ink/40'
   return (
-    <section ref={ref} className="cine-frame relative overflow-hidden" style={{ minHeight: '74vh' }}>
-      <motion.div className="absolute inset-[-10%]" style={{ y: bgY, scale: bgScale }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/photos/Image.193.JPG" alt="" className="w-full h-full object-cover object-center" aria-hidden />
-      </motion.div>
-      <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(12,3,22,0.70) 0%, rgba(12,3,22,0.82) 55%, rgba(10,2,18,0.98) 100%)' }} />
-      <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 50% 55%, rgba(222,185,106,0.12) 0%, transparent 62%)' }} />
-      <div className="cine-vignette" />
-      <div className="film-grain" aria-hidden />
-
-      <div className="relative z-[3] max-w-[1280px] mx-auto px-5 sm:px-8 lg:px-10 flex items-center" style={{ minHeight: '74vh' }}>
-        <motion.div style={{ y: contentY }} className="pt-32 pb-20">
-          <motion.div
-            initial={{ opacity: 0, y: 26, filter: 'blur(12px)' }}
-            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-            transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <p className="cine-kicker mb-6">Gatherings &amp; Events</p>
-            <h1
-              className="cine-display text-white-soft"
-              style={{ fontSize: 'clamp(3.2rem, 9vw, 7rem)' }}
-            >
-              Where faith<br />
-              <span className="italic" style={{ color: '#DEB96A' }}>comes alive.</span>
-            </h1>
-            <p className="font-lora text-cream/65 text-lg lg:text-xl mt-7 max-w-xl leading-relaxed">
-              From weekly gatherings to large-scale conferences, every Throneway event is designed to bring you deeper - in worship, in community, and in faith.
-            </p>
-          </motion.div>
-        </motion.div>
+    <Reveal direction="up">
+      <div className="flex items-end justify-between gap-6 pb-6" style={{ borderBottom: `1px solid ${line}` }}>
+        <div className="flex items-baseline gap-5">
+          <span className={`ed-index ${idx}`} style={{ fontSize: 'clamp(2rem, 4vw, 3.4rem)' }}>{index}</span>
+          <span className={`ed-kicker ${kick}`}>{kicker}</span>
+        </div>
+        <span className={`ed-caption ${tg} hidden sm:block`}>{tag}</span>
       </div>
-    </section>
+    </Reveal>
   )
 }
 
 export default function EventsPage() {
   const upcoming = UPCOMING_EVENTS[0]
 
+  const upcomingSpecs = [
+    { label: 'When', value: upcoming.schedule },
+    { label: 'Where', value: upcoming.location },
+    { label: 'Ages', value: upcoming.ageGroup },
+  ]
+
   return (
-    <main className="min-h-screen bg-void">
+    <main style={{ background: 'var(--ink)' }}>
 
-      <EventsHero />
+      {/* ── Masthead ── */}
+      <section className="relative" style={{ background: 'var(--ink)', color: 'var(--cream)' }}>
+        <div className="max-w-[1400px] mx-auto px-5 sm:px-8 lg:px-12 pt-28 lg:pt-36">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.15 }}
+            className="flex items-end justify-between gap-6 pb-5"
+            style={{ borderBottom: '1px solid rgba(245,240,232,0.16)' }}
+          >
+            <span className="ed-caption text-cream/55">Gatherings &amp; Events</span>
+            <span className="ed-caption text-cream/55 hidden sm:block">Throneway — Toronto</span>
+            <span className="ed-caption text-cream/55">Vol. 01</span>
+          </motion.div>
 
-      {/* ── Ongoing — Heights featured ── */}
-      <section className="cine-frame relative overflow-hidden py-24 lg:py-32" style={{ background: NAVY }}>
-        <div className="absolute inset-0">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/photos/Image.81.JPG" alt="" className="w-full h-full object-cover object-center" aria-hidden />
-          <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, rgba(8,16,30,0.96) 0%, rgba(11,28,54,0.90) 40%, rgba(8,16,30,0.98) 100%)` }} />
-          <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse at 60% 40%, rgba(103,200,252,0.07) 0%, transparent 60%)` }} />
-        </div>
-        <div className="cine-vignette" />
-        <div className="film-grain" aria-hidden />
-
-        <div className="relative z-[3] max-w-[1280px] mx-auto px-5 sm:px-8 lg:px-10">
-
-          <Reveal direction="up" className="mb-16">
-            <p className="cine-kicker mb-4" style={{ color: 'rgba(103,200,252,0.85)' }}>Ongoing</p>
-            <h2 className="cine-display text-white-soft" style={{ fontSize: 'clamp(2.6rem, 5.5vw, 4.4rem)' }}>
-              Regular Gatherings
-            </h2>
-          </Reveal>
-
-          <Reveal direction="up" delay={0.1} blur duration={1.2}>
-            <div
-              className="rounded-sm overflow-hidden"
-              style={{
-                border: `1px solid ${MAYA}25`,
-                background: `linear-gradient(160deg, ${BLUE_MID} 0%, ${NAVY} 60%, #0e1f38 100%)`,
-                boxShadow: `0 0 70px ${MAYA}1a, 0 28px 70px rgba(0,0,0,0.55)`,
-              }}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 py-16 lg:py-24 items-end">
+            <motion.div
+              initial={{ opacity: 0, y: 28 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.3, ease: EASE }}
+              className="lg:col-span-8"
             >
-              <div className="grid grid-cols-1 lg:grid-cols-5">
+              <h1 className="ed-display text-white-soft" style={{ fontSize: 'clamp(3.4rem, 11vw, 9rem)' }}>
+                Where faith{' '}
+                <span className="italic" style={{ color: 'var(--gold-light)' }}>comes alive.</span>
+              </h1>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.5, ease: EASE }}
+              className="lg:col-span-4"
+            >
+              <p className="ed-body text-cream/55 text-base lg:text-lg">
+                From weekly gatherings to large-scale conferences, every Throneway event is designed to bring you deeper - in worship, in community, and in faith.
+              </p>
+            </motion.div>
+          </div>
 
-                <div
-                  className="lg:col-span-2 relative overflow-hidden"
-                  style={{ borderRight: `1px solid ${MAYA}20`, minHeight: '440px' }}
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src="/heights-poster.png"
-                    alt="Throneway Heights poster"
-                    className="absolute inset-0 w-full h-full object-cover object-center"
-                  />
-                  <div
-                    className="absolute inset-0"
-                    style={{ background: `linear-gradient(to right, transparent 55%, rgba(10,22,40,0.55) 100%), linear-gradient(to bottom, rgba(10,22,40,0.15) 0%, transparent 15%)` }}
-                  />
-                </div>
-
-                <div className="lg:col-span-3 flex flex-col justify-center gap-6 p-10 lg:p-16">
-                  <p className="font-instrument text-[11px] tracking-[0.3em] uppercase" style={{ color: MAYA }}>
-                    {upcoming.subtitle}
-                  </p>
-
-                  <h3 className="cine-display text-white-soft" style={{ fontSize: 'clamp(1.9rem, 3.4vw, 2.8rem)' }}>
-                    {upcoming.title}
-                  </h3>
-
-                  <p className="font-lora text-cream/75 text-base lg:text-lg leading-relaxed max-w-lg">
-                    {upcoming.description}
-                  </p>
-
-                  <div className="flex flex-col gap-3 pl-6" style={{ borderLeft: `1px solid ${MAYA}55` }}>
-                    <div className="flex items-center gap-3">
-                      <Clock size={13} style={{ color: `${MAYA}99` }} className="flex-shrink-0" />
-                      <span className="font-instrument text-sm text-cream/85 tracking-wide">{upcoming.schedule}</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <MapPin size={13} style={{ color: `${MAYA}99` }} className="flex-shrink-0" />
-                      <span className="font-instrument text-sm text-cream/85 tracking-wide">{upcoming.location}</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Users size={13} style={{ color: `${MAYA}99` }} className="flex-shrink-0" />
-                      <span className="font-instrument text-sm text-cream/85 tracking-wide">Ages {upcoming.ageGroup}</span>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-wrap gap-2">
-                    {upcoming.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="font-instrument text-[10px] tracking-[0.18em] uppercase px-3.5 py-2 rounded-sm"
-                        style={{ background: `${MAYA}10`, border: `1px solid ${MAYA}35`, color: `${MAYA}cc` }}
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="flex items-center gap-5 pt-2">
-                    <Link href="/contact" className="btn-primary w-fit">
-                      RSVP / Get in Touch
-                    </Link>
-                    <a
-                      href="https://www.instagram.com/throneway"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-instrument text-sm transition-colors"
-                      style={{ color: `${MAYA}80` }}
-                      onMouseEnter={e => (e.currentTarget.style.color = MAYA)}
-                      onMouseLeave={e => (e.currentTarget.style.color = `${MAYA}80`)}
-                    >
-                      Follow for updates &rarr;
-                    </a>
-                  </div>
-                </div>
-              </div>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.1, delay: 0.45, ease: EASE }}
+          >
+            <div className="relative w-full overflow-hidden" style={{ aspectRatio: '16 / 7', border: '1px solid rgba(245,240,232,0.16)' }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/photos/Image.193.JPG" alt="" className="w-full h-full object-cover object-center" aria-hidden />
             </div>
-          </Reveal>
+            <span className="ed-caption text-cream/40 mt-4 block">Fig. 01 — Throneway gathering</span>
+          </motion.div>
+        </div>
+      </section>
 
-          <Reveal direction="up" delay={0.2}>
-            <p className="font-instrument text-sm text-cream/40 mt-10 text-center tracking-wide">
-              More events announced throughout the year - follow us on Instagram to stay updated.
+      {/* ── 01 Ongoing ── */}
+      <section className="relative py-24 lg:py-36 mt-16 lg:mt-24" style={{ background: 'var(--paper)', color: 'var(--ink)' }}>
+        <div className="max-w-[1400px] mx-auto px-5 sm:px-8 lg:px-12">
+          <SectionHeader index="01" kicker="Ongoing" tag="Regular Gatherings" dark={false} />
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 mt-14 lg:mt-20 items-start">
+            <Reveal direction="up" delay={0.08} className="lg:col-span-5 order-1">
+              <figure>
+                <ImageReveal className="overflow-hidden">
+                  <div style={{ border: '1px solid rgba(22,21,24,0.18)' }}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src="/heights-poster.png" alt="Throneway Heights poster" className="w-full block" />
+                  </div>
+                </ImageReveal>
+                <figcaption className="ed-caption text-ink/45 mt-4">Fig. A — Throneway Heights</figcaption>
+              </figure>
+            </Reveal>
+
+            <div className="lg:col-span-7 order-2 flex flex-col">
+              <Reveal direction="up" delay={0.04}>
+                <p className="ed-caption text-purple-rich mb-5">{upcoming.subtitle}</p>
+                <h2 className="ed-display" style={{ fontSize: 'clamp(2.6rem, 6vw, 5rem)' }}>{upcoming.title}</h2>
+              </Reveal>
+
+              <Reveal direction="up" delay={0.08}>
+                <p className="font-cormorant text-ink/75 leading-[1.4] mt-7 max-w-xl" style={{ fontSize: 'clamp(1.3rem, 2.2vw, 1.75rem)' }}>
+                  {upcoming.description}
+                </p>
+              </Reveal>
+
+              <Reveal direction="up" delay={0.12} className="mt-10 max-w-lg">
+                {upcomingSpecs.map((s, i) => (
+                  <div
+                    key={s.label}
+                    className="grid grid-cols-[100px_1fr] gap-6 py-4 items-baseline"
+                    style={{
+                      borderTop: '1px solid rgba(22,21,24,0.16)',
+                      borderBottom: i === upcomingSpecs.length - 1 ? '1px solid rgba(22,21,24,0.16)' : 'none',
+                    }}
+                  >
+                    <span className="ed-caption text-ink/45">{s.label}</span>
+                    <span className="font-cormorant text-xl lg:text-2xl text-ink/85">{s.value}</span>
+                  </div>
+                ))}
+              </Reveal>
+
+              <Reveal direction="up" delay={0.16} className="mt-10 flex flex-col gap-8">
+                <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+                  {upcoming.tags.map((tag, i) => (
+                    <span key={tag} className="flex items-center gap-5">
+                      {i > 0 && <span className="text-ink/25">/</span>}
+                      <span className="ed-caption text-ink/55">{tag}</span>
+                    </span>
+                  ))}
+                </div>
+                <div className="flex flex-col sm:flex-row sm:items-center gap-6 sm:gap-10">
+                  <Link href="/contact" className="btn-primary w-fit">
+                    <span>RSVP / Get in Touch</span>
+                  </Link>
+                  <a
+                    href="https://www.instagram.com/throneway"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="ed-link text-ink"
+                  >
+                    Follow for updates &rarr;
+                  </a>
+                </div>
+              </Reveal>
+            </div>
+          </div>
+
+          <Reveal direction="up" delay={0.1}>
+            <p className="ed-caption text-ink/40 mt-16 text-center">
+              More events announced throughout the year — follow us on Instagram to stay updated.
             </p>
           </Reveal>
         </div>
       </section>
 
-      {/* ── Next Events ── */}
-      <section className="relative py-24 lg:py-28 overflow-hidden" style={{ background: '#0d0018' }}>
-        <div className="film-grain" aria-hidden />
-        <div className="absolute inset-x-0 top-0 h-px" style={{ background: 'linear-gradient(to right, transparent, rgba(222,185,106,0.22), transparent)' }} />
-
-        <div className="relative z-[3] max-w-[1280px] mx-auto px-5 sm:px-8 lg:px-10">
-          <Reveal direction="up" className="mb-12">
-            <p className="cine-kicker mb-4">Upcoming</p>
-            <h2 className="cine-display text-white-soft" style={{ fontSize: 'clamp(2.6rem, 5.5vw, 4.4rem)' }}>
-              Next Events
-            </h2>
-          </Reveal>
-
-          <Reveal direction="up" delay={0.12}>
-            <div
-              className="py-20 text-center rounded-sm"
-              style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(222,185,106,0.12)' }}
-            >
-              <p className="font-cormorant italic text-cream/40 text-lg tracking-wide">
-                Nothing scheduled right now - follow us on Instagram to be the first to know.
+      {/* ── 02 Upcoming ── */}
+      <section className="relative py-24 lg:py-32" style={{ background: 'var(--ink)', color: 'var(--cream)' }}>
+        <div className="max-w-[1400px] mx-auto px-5 sm:px-8 lg:px-12">
+          <SectionHeader index="02" kicker="Upcoming" tag="Calendar" dark />
+          <Reveal direction="up" delay={0.1}>
+            <div className="mt-16 py-24 text-center" style={{ border: '1px solid rgba(245,240,232,0.14)' }}>
+              <p className="font-cormorant italic text-cream/45" style={{ fontSize: 'clamp(1.3rem, 2.4vw, 1.9rem)' }}>
+                Nothing scheduled right now — follow us on Instagram to be the first to know.
               </p>
             </div>
           </Reveal>
         </div>
       </section>
 
-      {/* ── Past Events ── */}
-      <section className="cine-frame relative py-24 lg:py-32 overflow-hidden" style={{ background: 'linear-gradient(to bottom, #14041f 0%, #1a0732 50%, #14041f 100%)' }}>
-        <div
-          className="god-ray"
-          style={{ top: '-6%', left: '8%', width: '40%', height: '60%', opacity: 0.6 }}
-        />
-        <div className="film-grain" aria-hidden />
-
-        <div className="relative z-[3] max-w-[1280px] mx-auto px-5 sm:px-8 lg:px-10">
-
-          <Reveal direction="up" className="mb-16">
-            <p className="cine-kicker mb-4">Looking Back</p>
-            <h2 className="cine-display text-white-soft" style={{ fontSize: 'clamp(2.6rem, 5.5vw, 4.4rem)' }}>
-              Past Events
-            </h2>
-          </Reveal>
+      {/* ── 03 Past Events ── */}
+      <section className="relative py-24 lg:py-36" style={{ background: 'var(--paper)', color: 'var(--ink)' }}>
+        <div className="max-w-[1400px] mx-auto px-5 sm:px-8 lg:px-12">
+          <SectionHeader index="03" kicker="Looking Back" tag="Archive" dark={false} />
 
           {PAST_EVENTS.map((event) => (
-            <Reveal key={event.title} direction="up" blur duration={1.2} className="mb-16 last:mb-0">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-
-                {/* Photos */}
-                <div className="grid grid-cols-2 gap-4">
-                  {event.photos.map((photo, j) => (
-                    <div
-                      key={photo}
-                      className="relative rounded-sm overflow-hidden group"
-                      style={{
-                        aspectRatio: '3/4',
-                        boxShadow: '0 18px 50px rgba(0,0,0,0.55)',
-                        marginTop: j === 1 ? '2.5rem' : '0',
-                        border: '1px solid rgba(222,185,106,0.14)',
-                      }}
-                    >
-                      <Image
-                        src={photo}
-                        alt={`${event.title} ${j + 1}`}
-                        fill
-                        className="object-cover object-center transition-transform duration-[1400ms] group-hover:scale-105"
-                        sizes="(max-width: 1024px) 50vw, 25vw"
-                      />
-                      <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 45%, rgba(13,0,24,0.55) 100%)' }} />
-                    </div>
-                  ))}
+            <div key={event.title} className="mt-16 lg:mt-24 first:mt-16">
+              <Reveal direction="up">
+                <div className="flex items-baseline justify-between gap-6 flex-wrap">
+                  <h2 className="ed-display" style={{ fontSize: 'clamp(2.8rem, 7vw, 6rem)' }}>{event.title}</h2>
+                  <span className="ed-index text-ink/25" style={{ fontSize: 'clamp(1.6rem, 3.4vw, 2.8rem)' }}>{event.year}</span>
                 </div>
+              </Reveal>
 
-                {/* Text */}
-                <div className="flex flex-col gap-6 lg:pt-6">
-                  <div className="flex items-center gap-3">
-                    <Calendar size={14} style={{ color: 'rgba(222,185,106,0.7)' }} />
-                    <span className="font-instrument text-[11px] tracking-[0.28em] uppercase" style={{ color: 'rgba(222,185,106,0.7)' }}>
-                      {event.year}
-                    </span>
-                  </div>
+              {/* Photo essay */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 mt-12">
+                <Reveal direction="up" delay={0.06} className="lg:col-span-7">
+                  <ImageReveal className="overflow-hidden">
+                    <div className="relative w-full" style={{ aspectRatio: '4 / 3', border: '1px solid rgba(22,21,24,0.18)' }}>
+                      <Image src={event.photos[0]} alt={`${event.title} 1`} fill className="object-cover object-center" sizes="(max-width: 1024px) 100vw, 58vw" />
+                    </div>
+                  </ImageReveal>
+                </Reveal>
+                {event.photos[1] && (
+                  <Reveal direction="up" delay={0.12} className="lg:col-span-5 lg:mt-16">
+                    <ImageReveal className="overflow-hidden">
+                      <div className="relative w-full" style={{ aspectRatio: '3 / 4', border: '1px solid rgba(22,21,24,0.18)' }}>
+                        <Image src={event.photos[1]} alt={`${event.title} 2`} fill className="object-cover object-center" sizes="(max-width: 1024px) 100vw, 40vw" />
+                      </div>
+                    </ImageReveal>
+                  </Reveal>
+                )}
+              </div>
 
-                  <h3
-                    className="cine-display text-white-soft"
-                    style={{ fontSize: 'clamp(2.4rem, 5vw, 3.8rem)' }}
-                  >
-                    {event.title}
-                  </h3>
-
-                  <p className="font-lora text-cream/65 text-base lg:text-lg leading-relaxed">
+              {/* Editorial body */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-x-12 gap-y-12 mt-16">
+                <Reveal direction="up" delay={0.04} className="lg:col-span-7">
+                  <p className="font-cormorant text-ink/80 leading-[1.4]" style={{ fontSize: 'clamp(1.4rem, 2.4vw, 2rem)' }}>
                     {event.description}
                   </p>
-
                   {event.scripture && (
-                    <blockquote className="font-cormorant italic text-cream/55 text-lg leading-relaxed pl-5" style={{ borderLeft: '1px solid rgba(222,185,106,0.4)' }}>
+                    <blockquote className="font-cormorant italic text-ink/55 leading-[1.5] mt-10 pl-6" style={{ borderLeft: '2px solid rgba(181,55,242,0.5)', fontSize: 'clamp(1.15rem, 2vw, 1.5rem)' }}>
                       &ldquo;{event.scripture.text}&rdquo;
-                      <span className="block font-instrument not-italic text-[11px] tracking-[0.2em] uppercase text-gold/45 mt-2">
-                        {event.scripture.reference}
-                      </span>
+                      <span className="ed-caption text-ink/45 block mt-3 not-italic">{event.scripture.reference}</span>
                     </blockquote>
                   )}
+                </Reveal>
 
+                <Reveal direction="up" delay={0.08} className="lg:col-span-5 flex flex-col gap-10">
                   {(event.location || event.time) && (
-                    <div className="flex flex-col gap-2">
+                    <div>
+                      <span className="ed-caption text-ink/40 block mb-4">Details</span>
                       {event.location && (
-                        <div className="flex items-center gap-3">
-                          <MapPin size={13} style={{ color: 'rgba(222,185,106,0.6)' }} className="flex-shrink-0" />
-                          <span className="font-instrument text-sm text-cream/70">{event.location}</span>
+                        <div className="grid grid-cols-[80px_1fr] gap-5 py-3" style={{ borderTop: '1px solid rgba(22,21,24,0.16)' }}>
+                          <span className="ed-caption text-ink/45">Where</span>
+                          <span className="font-cormorant text-lg text-ink/85">{event.location}</span>
                         </div>
                       )}
                       {event.time && (
-                        <div className="flex items-center gap-3">
-                          <Clock size={13} style={{ color: 'rgba(222,185,106,0.6)' }} className="flex-shrink-0" />
-                          <span className="font-instrument text-sm text-cream/70">{event.time}</span>
+                        <div className="grid grid-cols-[80px_1fr] gap-5 py-3" style={{ borderTop: '1px solid rgba(22,21,24,0.16)', borderBottom: '1px solid rgba(22,21,24,0.16)' }}>
+                          <span className="ed-caption text-ink/45">Time</span>
+                          <span className="font-cormorant text-lg text-ink/85">{event.time}</span>
                         </div>
                       )}
                     </div>
@@ -330,15 +285,12 @@ export default function EventsPage() {
 
                   {event.program && (
                     <div>
-                      <p className="font-instrument text-[10px] tracking-[0.24em] uppercase text-cream/35 mb-3">Program</p>
-                      <div className="flex flex-wrap gap-2">
-                        {event.program.map((item) => (
-                          <span
-                            key={item}
-                            className="font-instrument text-[10px] tracking-[0.14em] uppercase px-3.5 py-2 rounded-sm"
-                            style={{ background: 'rgba(222,185,106,0.07)', border: '1px solid rgba(222,185,106,0.2)', color: 'rgba(222,185,106,0.8)' }}
-                          >
-                            {item}
+                      <span className="ed-caption text-ink/40 block mb-4">Program</span>
+                      <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+                        {event.program.map((item, i) => (
+                          <span key={item} className="flex items-center gap-4">
+                            {i > 0 && <span className="text-ink/25">·</span>}
+                            <span className="font-cormorant text-lg text-ink/75">{item}</span>
                           </span>
                         ))}
                       </div>
@@ -346,98 +298,86 @@ export default function EventsPage() {
                   )}
 
                   {event.speakers && (
-                    <div className="flex flex-col gap-3">
-                      <p className="font-instrument text-[10px] tracking-[0.24em] uppercase text-cream/35">Featured</p>
-                      {event.speakers.map((s) => (
-                        <div key={s.name} className="flex flex-col gap-0.5">
-                          <p className="font-instrument text-sm font-semibold text-cream/90">{s.name}</p>
-                          <p className="font-instrument text-xs text-cream/45 leading-snug">{s.role}</p>
+                    <div>
+                      <span className="ed-caption text-ink/40 block mb-4">Featured</span>
+                      {event.speakers.map((s, i) => (
+                        <div
+                          key={s.name}
+                          className="py-4"
+                          style={{
+                            borderTop: '1px solid rgba(22,21,24,0.16)',
+                            borderBottom: i === event.speakers!.length - 1 ? '1px solid rgba(22,21,24,0.16)' : 'none',
+                          }}
+                        >
+                          <p className="font-cormorant text-xl text-ink/90">{s.name}</p>
+                          <p className="ed-caption text-ink/45 mt-1.5">{s.role}</p>
                         </div>
                       ))}
                     </div>
                   )}
-                </div>
+                </Reveal>
               </div>
-            </Reveal>
+            </div>
           ))}
         </div>
       </section>
 
-      {/* ── Stay Connected CTA ── */}
-      <section className="cine-frame relative py-24 lg:py-32 overflow-hidden" style={{ background: 'linear-gradient(to bottom, #14041f 0%, #0d0018 100%)' }}>
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse at 30% 40%, rgba(181,55,242,0.12) 0%, transparent 60%)' }}
-        />
-        <div className="film-grain" aria-hidden />
+      {/* ── 04 Stay Connected ── */}
+      <section className="relative py-24 lg:py-36" style={{ background: 'var(--ink)', color: 'var(--cream)' }}>
+        <div className="max-w-[1400px] mx-auto px-5 sm:px-8 lg:px-12">
+          <SectionHeader index="04" kicker="Stay in the Loop" tag="Connect" dark />
 
-        <div className="relative z-[3] max-w-[1280px] mx-auto px-5 sm:px-8 lg:px-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 mt-14 lg:mt-20">
+            <div className="lg:col-span-7 flex flex-col">
+              <Reveal direction="up" delay={0.04}>
+                <h2 className="ed-display text-white-soft" style={{ fontSize: 'clamp(2.6rem, 6vw, 5rem)' }}>
+                  Never miss an event.
+                </h2>
+              </Reveal>
+              <Reveal direction="up" delay={0.08}>
+                <p className="ed-body text-cream/55 text-base lg:text-lg max-w-lg mt-8">
+                  Follow us on social media for real-time announcements, behind-the-scenes content, and updates on upcoming gatherings.
+                </p>
+              </Reveal>
+              <Reveal direction="up" delay={0.12} className="mt-12 max-w-lg">
+                <ul>
+                  {SOCIAL_LINKS.map((link, i) => (
+                    <li key={link.platform}>
+                      <a
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group flex items-center justify-between py-4"
+                        style={{ borderTop: i === 0 ? 'none' : '1px solid rgba(245,240,232,0.1)' }}
+                      >
+                        <span className="flex items-center gap-4">
+                          <span className="ed-caption text-cream/30 w-6">{String(i + 1).padStart(2, '0')}</span>
+                          <span className="text-cream/50 group-hover:text-gold-light transition-colors"><SocialIcon icon={link.icon} /></span>
+                          <span className="font-cormorant text-xl lg:text-2xl text-cream/85 group-hover:text-white-soft transition-colors">{link.platform}</span>
+                        </span>
+                        <span className="ed-caption text-cream/30 group-hover:text-gold-light group-hover:translate-x-1 transition-all duration-300">&#8599;</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </Reveal>
+            </div>
 
-          <Reveal direction="up" className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-12">
-            <div className="flex flex-col gap-5">
-              <p className="cine-kicker">Stay in the Loop</p>
-              <h2
-                className="cine-display text-white-soft"
-                style={{ fontSize: 'clamp(2rem, 4.5vw, 3.4rem)' }}
-              >
-                Never miss an event.
-              </h2>
-              <p className="font-lora text-cream/60 text-base lg:text-lg leading-relaxed max-w-lg">
-                Follow us on social media for real-time announcements, behind-the-scenes content, and updates on upcoming gatherings.
-              </p>
-
-              <div className="flex flex-wrap gap-3 mt-2">
-                {SOCIAL_LINKS.map((link) => (
-                  <a
-                    key={link.platform}
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 font-instrument text-xs tracking-[0.08em] px-4 py-3 rounded-sm transition-all duration-300"
-                    style={{ border: '1px solid rgba(245,240,232,0.12)', color: 'rgba(245,240,232,0.5)' }}
-                    onMouseEnter={e => {
-                      e.currentTarget.style.borderColor = 'rgba(222,185,106,0.5)'
-                      e.currentTarget.style.color = '#DEB96A'
-                    }}
-                    onMouseLeave={e => {
-                      e.currentTarget.style.borderColor = 'rgba(245,240,232,0.12)'
-                      e.currentTarget.style.color = 'rgba(245,240,232,0.5)'
-                    }}
-                  >
-                    <SocialIcon icon={link.icon} />
-                    {link.platform}
-                  </a>
-                ))}
+            <Reveal direction="up" delay={0.1} className="lg:col-span-5">
+              <div className="p-9 lg:p-11 h-full flex flex-col gap-5" style={{ border: '1px solid rgba(245,240,232,0.16)' }}>
+                <span className="ed-caption text-gold-light">Got Questions?</span>
+                <h3 className="font-cormorant font-medium text-white-soft" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.2rem)' }}>
+                  We&apos;d love to hear from you.
+                </h3>
+                <p className="ed-body text-cream/55 text-sm lg:text-base">
+                  Want to partner with us, book an event, or just learn more? Reach out.
+                </p>
+                <Link href="/contact" className="ed-link text-gold-light mt-2 w-fit">
+                  Contact Us &rarr;
+                </Link>
               </div>
-            </div>
-
-            <div
-              className="flex-shrink-0 flex flex-col gap-4 p-9 rounded-sm"
-              style={{
-                background: 'linear-gradient(135deg, rgba(31,31,34,0.6) 0%, rgba(13,0,24,0.6) 100%)',
-                minWidth: '300px',
-                border: '1px solid rgba(222,185,106,0.2)',
-                backdropFilter: 'blur(4px)',
-              }}
-            >
-              <p className="font-instrument text-[10px] tracking-[0.28em] uppercase text-gold/75">Got Questions?</p>
-              <h3 className="font-cormorant font-semibold text-white-soft text-2xl">
-                We&apos;d love to hear from you.
-              </h3>
-              <p className="font-instrument text-cream/55 text-sm leading-relaxed">
-                Want to partner with us, book an event, or just learn more? Reach out.
-              </p>
-              <Link
-                href="/contact"
-                className="flex items-center gap-2 font-instrument text-sm tracking-[0.06em] px-5 py-3 rounded-sm transition-all duration-300 w-fit group"
-                style={{ background: 'rgba(222,185,106,0.12)', border: '1px solid rgba(222,185,106,0.4)', color: '#DEB96A' }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(222,185,106,0.22)' }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(222,185,106,0.12)' }}
-              >
-                Contact Us <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform duration-300" />
-              </Link>
-            </div>
-          </Reveal>
+            </Reveal>
+          </div>
         </div>
       </section>
     </main>

@@ -1,9 +1,9 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { RUNNING_SINGLE } from '@/lib/constants'
 
 const HERO_IMAGES = [
@@ -15,167 +15,167 @@ const HERO_IMAGES = [
   { src: '/photos/Image.126.JPG', alt: 'Throneway band performing on stage' },
 ]
 
-const REVERENT_EASE = [0.16, 1, 0.3, 1] as const
+const EASE = [0.22, 1, 0.36, 1] as const
 
 export default function HeroSection() {
   const [current, setCurrent] = useState(0)
-  const [timerKey, setTimerKey] = useState(0)
-  const sectionRef = useRef<HTMLElement>(null)
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end start'],
-  })
-  // Content drifts up and fades as you scroll away — a slow cinematic exit.
-  const contentY = useTransform(scrollYProgress, [0, 1], ['0%', '-22%'])
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0])
 
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrent((i) => (i + 1) % HERO_IMAGES.length)
-    }, 6500)
+    }, 6000)
     return () => clearInterval(timer)
-  }, [timerKey])
+  }, [])
 
   return (
-    <section
-      ref={sectionRef}
-      className="cine-frame relative w-full h-[100svh] min-h-[640px] flex items-center justify-center overflow-hidden"
-    >
+    <section className="relative w-full min-h-[100svh] flex flex-col" style={{ background: 'var(--ink)' }}>
 
-      {/* Slideshow background — slow Ken Burns push on the active frame */}
-      <div className="absolute inset-0">
-        <AnimatePresence>
-          {HERO_IMAGES.map((img, i) =>
-            i === current ? (
-              <motion.div
-                key={img.src}
-                className="absolute inset-0"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 2.4, ease: 'easeInOut' }}
+      {/* Masthead metadata bar */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 0.2 }}
+        className="relative z-10 max-w-[1400px] w-full mx-auto px-5 sm:px-8 lg:px-12 pt-28 lg:pt-32"
+      >
+        <div className="flex items-end justify-between gap-6 pb-5" style={{ borderBottom: '1px solid rgba(245,240,232,0.16)' }}>
+          <span className="ed-caption text-cream/55">Worship through the Arts</span>
+          <span className="ed-caption text-cream/55 hidden sm:block">Jesus Youth Canada — Toronto</span>
+          <span className="ed-caption text-cream/55">Vol. 01</span>
+        </div>
+      </motion.div>
+
+      {/* Cover spread */}
+      <div className="relative z-10 flex-1 max-w-[1400px] w-full mx-auto px-5 sm:px-8 lg:px-12 py-12 lg:py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 h-full items-center">
+
+          {/* Left — wordmark + statement */}
+          <div className="lg:col-span-6 flex flex-col">
+            <motion.div
+              initial={{ opacity: 0, y: 28 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.35, ease: EASE }}
+            >
+              <Image
+                src="/logos/LogoFull.png"
+                alt="Throneway — Worship through the Arts"
+                width={1456}
+                height={816}
+                className="w-full max-w-[560px] h-auto"
+                style={{ filter: 'brightness(0) invert(1)' }}
+                priority
+              />
+            </motion.div>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.55, ease: EASE }}
+              className="ed-display text-white-soft mt-9"
+              style={{ fontSize: 'clamp(2.6rem, 5.4vw, 5rem)' }}
+            >
+              A Catholic creative ministry,{' '}
+              <span className="italic" style={{ color: 'var(--gold-light)' }}>building a culture of worship.</span>
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 0.8 }}
+              className="ed-caption text-cream/45 mt-7"
+            >
+              An Outreach Ministry of Jesus Youth Canada
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.95, ease: EASE }}
+              className="flex flex-col sm:flex-row items-start sm:items-center gap-5 sm:gap-8 mt-9"
+            >
+              <Link href="/events" className="btn-ghost" style={{ color: 'var(--cream)' }}>
+                <span>Join the Community</span>
+              </Link>
+              <a
+                href={RUNNING_SINGLE.spotifyUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ed-link text-gold-light"
               >
-                <div className="kenburns absolute inset-0">
-                  <Image
-                    src={img.src}
-                    alt={img.alt}
-                    fill
-                    priority={i === 0}
-                    className="object-cover object-center"
-                    sizes="100vw"
-                  />
+                Check Out Our Music &rarr;
+              </a>
+            </motion.div>
+          </div>
+
+          {/* Right — feature plate */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.1, delay: 0.5, ease: EASE }}
+            className="lg:col-span-6"
+          >
+            <div className="relative w-full" style={{ aspectRatio: '4 / 5' }}>
+              <div className="absolute inset-0 overflow-hidden" style={{ border: '1px solid rgba(245,240,232,0.18)' }}>
+                <AnimatePresence>
+                  {HERO_IMAGES.map((img, i) =>
+                    i === current ? (
+                      <motion.div
+                        key={img.src}
+                        className="absolute inset-0"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 1.4, ease: 'easeInOut' }}
+                      >
+                        <Image
+                          src={img.src}
+                          alt={img.alt}
+                          fill
+                          priority={i === 0}
+                          className="object-cover object-center"
+                          sizes="(max-width: 1024px) 100vw, 50vw"
+                        />
+                      </motion.div>
+                    ) : null
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Figure caption */}
+              <div className="absolute -bottom-9 left-0 right-0 flex items-center justify-between gap-4">
+                <span className="ed-caption text-cream/45">
+                  Fig. {String(current + 1).padStart(2, '0')} — {HERO_IMAGES[current].alt}
+                </span>
+                <div className="flex items-center gap-1.5">
+                  {HERO_IMAGES.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setCurrent(i)}
+                      aria-label={`View image ${i + 1}`}
+                      className="h-px transition-all duration-500"
+                      style={{
+                        width: i === current ? 22 : 10,
+                        background: i === current ? 'var(--gold-light)' : 'rgba(245,240,232,0.3)',
+                      }}
+                    />
+                  ))}
                 </div>
-              </motion.div>
-            ) : null
-          )}
-        </AnimatePresence>
+              </div>
+            </div>
+          </motion.div>
+        </div>
       </div>
 
-      {/* Atmospheric grade — warm-shadow cinematic overlay */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            'linear-gradient(to bottom, rgba(20,8,30,0.34) 0%, rgba(18,6,28,0.30) 38%, rgba(15,4,24,0.66) 72%, rgba(12,3,20,0.98) 100%)',
-        }}
-      />
-      <div className="cine-vignette" />
-      {/* Volumetric shaft of light from the top */}
-      <div
-        className="god-ray"
-        style={{ top: '-12%', left: '12%', width: '46%', height: '90%', opacity: 0.7 }}
-      />
-      <div className="film-grain" aria-hidden />
-
-      {/* Content */}
-      <motion.div
-        style={{ y: contentY, opacity: contentOpacity }}
-        className="relative z-10 flex flex-col items-center text-center px-4 pb-[16vh]"
-      >
-
-        <motion.div
-          initial={{ opacity: 0, scale: 0.92, filter: 'blur(16px)' }}
-          animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-          transition={{ duration: 1.8, delay: 0.35, ease: REVERENT_EASE }}
-          className="mb-7"
-        >
-          <Image
-            src="/logos/LogoFull.png"
-            alt="Throneway — Worship through the Arts"
-            width={1456}
-            height={816}
-            className="w-[80vw] max-w-[940px] h-auto max-h-[42vh] object-contain"
-            style={{ filter: 'brightness(0) invert(1) drop-shadow(0 4px 40px rgba(0,0,0,0.95)) drop-shadow(0 0 18px rgba(0,0,0,0.7))' }}
-            priority
-          />
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, delay: 1.0, ease: REVERENT_EASE }}
-          className="flex items-center gap-5 mb-9"
-        >
-          <div className="h-px w-12 sm:w-20 bg-gradient-to-r from-transparent to-gold/50" />
-          <p className="font-instrument text-[9px] sm:text-[10px] tracking-[0.32em] uppercase text-cream/80 whitespace-nowrap">
-            An Outreach Ministry of Jesus Youth Canada
-          </p>
-          <div className="h-px w-12 sm:w-20 bg-gradient-to-l from-transparent to-gold/50" />
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.1, delay: 1.25, ease: REVERENT_EASE }}
-          className="flex flex-col sm:flex-row items-center gap-4"
-        >
-          <Link href="/events" className="btn-primary min-w-[210px]">
-            Join the Community
-          </Link>
-          <a
-            href={RUNNING_SINGLE.spotifyUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-ghost min-w-[210px]"
-          >
-            Check Out Our Music &rarr;
-          </a>
-        </motion.div>
-      </motion.div>
-
-      {/* Slideshow markers */}
+      {/* Foot index rule */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 1.4, delay: 1.6 }}
-        className="absolute left-1/2 -translate-x-1/2 z-10 flex items-center gap-2.5"
-        style={{ bottom: '10vh' }}
+        transition={{ duration: 1, delay: 1.2 }}
+        className="relative z-10 max-w-[1400px] w-full mx-auto px-5 sm:px-8 lg:px-12 pb-8"
       >
-        {HERO_IMAGES.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => { setCurrent(i); setTimerKey((k) => k + 1) }}
-            aria-label={`Go to slide ${i + 1}`}
-            className={`transition-all duration-700 rounded-full ${
-              i === current
-                ? 'w-8 h-[3px] bg-gold/80'
-                : 'w-[3px] h-[3px] bg-white/30 hover:bg-white/55'
-            }`}
-          />
-        ))}
-      </motion.div>
-
-      {/* Scroll cue */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.4, delay: 2.0 }}
-        className="absolute left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2.5"
-        style={{ bottom: '3vh' }}
-      >
-        <span className="font-instrument text-[9px] tracking-[0.4em] uppercase text-white/35">Scroll</span>
-        <div className="w-px h-9 bg-gradient-to-b from-gold/40 to-transparent animate-scroll-bounce" />
+        <div className="flex items-center justify-between gap-6 pt-5" style={{ borderTop: '1px solid rgba(245,240,232,0.16)' }}>
+          <span className="ed-caption text-cream/40">Identity · Music · Gatherings · Spirituality</span>
+          <span className="ed-caption text-cream/40">Scroll &darr;</span>
+        </div>
       </motion.div>
     </section>
   )

@@ -1,110 +1,77 @@
 'use client'
 
-import { useRef } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import Reveal, { ImageReveal } from '@/components/ui/Reveal'
 import { DONATE_URL } from '@/lib/constants'
 
-const REVERENT_EASE = [0.16, 1, 0.3, 1] as const
-
 export default function DonateCTA() {
-  const sectionRef = useRef<HTMLElement>(null)
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'end start'],
-  })
-  const bgY = useTransform(scrollYProgress, [0, 1], ['-12%', '12%'])
-  const bgScale = useTransform(scrollYProgress, [0, 1], [1.12, 1.22])
-
   return (
-    <section
-      ref={sectionRef}
-      className="cine-frame relative overflow-hidden py-36 lg:py-48"
-    >
-      {/* Parallax + slow scale background — the climactic image */}
-      <motion.div className="absolute inset-[-14%]" style={{ y: bgY, scale: bgScale }}>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/photos/Image.379.JPG"
-          alt="Priest raising the golden monstrance"
-          className="w-full h-full object-cover object-center"
-        />
-      </motion.div>
+    <section className="relative py-24 lg:py-36" style={{ background: 'var(--paper)', color: 'var(--ink)' }}>
+      <div className="max-w-[1400px] mx-auto px-5 sm:px-8 lg:px-12">
 
-      <div
-        className="absolute inset-0"
-        style={{ background: 'linear-gradient(to bottom, rgba(10,3,20,0.86) 0%, rgba(12,3,22,0.74) 50%, rgba(8,2,16,0.94) 100%)' }}
-      />
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse at center, rgba(222,185,106,0.16) 0%, rgba(181,55,242,0.14) 38%, transparent 70%)' }}
-      />
-      <div className="cine-vignette" />
-      <div className="film-grain" aria-hidden />
+        {/* Section header */}
+        <Reveal direction="up">
+          <div className="flex items-end justify-between gap-6 pb-6" style={{ borderBottom: '1px solid rgba(22,21,24,0.2)' }}>
+            <div className="flex items-baseline gap-5">
+              <span className="ed-index text-ink/25" style={{ fontSize: 'clamp(2rem, 4vw, 3.4rem)' }}>05</span>
+              <span className="ed-kicker text-ink/60">Support the Ministry</span>
+            </div>
+            <span className="ed-caption text-ink/40 hidden sm:block">Give</span>
+          </div>
+        </Reveal>
 
-      {/* Content */}
-      <div className="relative z-[3] max-w-[920px] mx-auto px-4 sm:px-6 text-center">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          variants={{
-            hidden: {},
-            visible: { transition: { staggerChildren: 0.16 } },
-          }}
-          className="flex flex-col items-center gap-8"
-        >
-          {([
-            <p key="k" className="cine-kicker cine-kicker--center">Support the Ministry</p>,
-            <blockquote
-              key="q"
-              className="cine-display font-light italic text-cream/95"
-              style={{ fontSize: 'clamp(2rem, 5.5vw, 3.6rem)' }}
-            >
-              &ldquo;To the one who conquers I will give a place with me on my{' '}
-              <em className="not-italic font-medium" style={{ color: '#DEB96A' }}>THRONE</em>
-              ...&rdquo;
-            </blockquote>,
-            <p key="r" className="font-instrument text-xs tracking-[0.3em] uppercase text-cream/45">
-              Revelation 3:21
-            </p>,
-            <div key="rule" className="w-20 h-px" style={{ background: 'rgba(222,185,106,0.45)' }} />,
-            <p key="b" className="font-lora text-cream/75 text-lg lg:text-xl leading-relaxed max-w-lg">
-              Help us create our debut album and keep this ministry alive. Every gift goes directly toward music, events, and outreach.
-            </p>,
-            <a
-              key="cta"
-              href={DONATE_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="relative overflow-hidden font-instrument text-sm tracking-[0.22em] uppercase font-semibold px-12 py-4 rounded-sm mt-2 transition-all duration-300 group"
-              style={{ background: '#6740AA', color: '#ffffff' }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = '#8B52D4'
-                e.currentTarget.style.boxShadow = '0 0 50px rgba(181,55,242,0.55)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = '#6740AA'
-                e.currentTarget.style.boxShadow = 'none'
-              }}
-            >
-              <span
-                className="absolute top-0 bottom-0 w-1/3 pointer-events-none animate-sheen"
-                style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent)' }}
-              />
-              <span className="relative">Support the Album</span>
-            </a>,
-          ]).map((node, i) => (
-            <motion.div
-              key={i}
-              variants={{
-                hidden: { opacity: 0, y: 28, filter: 'blur(8px)' },
-                visible: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 1, ease: REVERENT_EASE } },
-              }}
-            >
-              {node}
-            </motion.div>
-          ))}
-        </motion.div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 mt-14 lg:mt-24 items-center">
+
+          {/* Statement */}
+          <div className="lg:col-span-7 flex flex-col order-2 lg:order-1">
+            <Reveal direction="up" delay={0.04}>
+              <blockquote className="ed-display" style={{ fontSize: 'clamp(2.4rem, 6vw, 5rem)' }}>
+                &ldquo;To the one who conquers I will give a place with me on my{' '}
+                <span className="italic" style={{ color: 'var(--purple-vivid)' }}>throne</span>
+                &hellip;&rdquo;
+              </blockquote>
+            </Reveal>
+
+            <Reveal direction="up" delay={0.08}>
+              <p className="ed-caption text-ink/45 mt-7">Revelation 3:21</p>
+            </Reveal>
+
+            <Reveal direction="up" delay={0.12}>
+              <p className="ed-body text-ink/65 text-base lg:text-lg max-w-lg mt-10">
+                Help us create our debut album and keep this ministry alive. Every gift goes directly toward music, events, and outreach.
+              </p>
+            </Reveal>
+
+            <Reveal direction="up" delay={0.16}>
+              <a
+                href={DONATE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-primary mt-10 w-fit"
+              >
+                <span>Support the Album</span>
+              </a>
+            </Reveal>
+          </div>
+
+          {/* Photo plate */}
+          <Reveal direction="up" delay={0.1} className="lg:col-span-5 order-1 lg:order-2">
+            <figure>
+              <ImageReveal className="overflow-hidden">
+                <div className="relative w-full" style={{ aspectRatio: '4 / 5', border: '1px solid rgba(22,21,24,0.18)' }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/photos/Image.379.JPG"
+                    alt="Priest raising the golden monstrance"
+                    className="absolute inset-0 w-full h-full object-cover object-center"
+                  />
+                </div>
+              </ImageReveal>
+              <figcaption className="ed-caption text-ink/45 mt-4">
+                Fig. C — Eucharistic adoration
+              </figcaption>
+            </figure>
+          </Reveal>
+        </div>
       </div>
     </section>
   )

@@ -1,6 +1,5 @@
 'use client'
 
-import { motion, type Variants } from 'framer-motion'
 import Reveal from '@/components/ui/Reveal'
 import { SIX_PILLARS } from '@/lib/constants'
 
@@ -14,88 +13,84 @@ const PILLAR_PHOTOS = [
   '/photos/Image.189.JPG',
 ]
 
-const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 38, filter: 'blur(10px)' },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    filter: 'blur(0px)',
-    transition: { duration: 0.9, delay: i * 0.12, ease: [0.16, 1, 0.3, 1] },
-  }),
-}
-
 export default function SixPillars() {
   return (
-    <section
-      className="cine-frame relative py-24 lg:py-40 overflow-hidden"
-      style={{ background: 'linear-gradient(to bottom, #0a1628 0%, #14041f 35%, #1a0732 70%, #14041f 100%)' }}
-    >
-      {/* Atmospheric god-ray descending from the top center */}
-      <div
-        className="god-ray"
-        style={{ top: '-10%', left: '28%', width: '44%', height: '80%', opacity: 0.8 }}
-      />
-      <div className="film-grain" aria-hidden />
+    <section className="relative py-24 lg:py-36" style={{ background: 'var(--ink)', color: 'var(--cream)' }}>
+      <div className="max-w-[1400px] mx-auto px-5 sm:px-8 lg:px-12">
 
-      <div className="relative z-[3] max-w-[1280px] mx-auto px-5 sm:px-8 lg:px-10">
-
-        {/* Header */}
-        <Reveal direction="up" className="text-center mb-20 lg:mb-28">
-          <p className="cine-kicker cine-kicker--center mb-6">Our Spirituality</p>
-          <h2
-            className="cine-display text-white-soft"
-            style={{ fontSize: 'clamp(2.8rem, 6.5vw, 5rem)' }}
-          >
-            Our Six Pillars
-          </h2>
-          <p className="font-cormorant italic text-cream/55 mt-7 max-w-2xl mx-auto leading-relaxed" style={{ fontSize: 'clamp(1.1rem, 2.4vw, 1.4rem)' }}>
-            &ldquo;Over the years, through its constant yearning and seeking, a refreshing spirituality has emerged within the Jesus Youth movement - drawn from the spirit of the Catholic Charismatic Renewal and the rich traditions of the Church.&rdquo;
-          </p>
-          <p className="font-instrument text-gold/45 text-xs tracking-[0.22em] uppercase mt-4">
-            - Jesus Youth International
-          </p>
+        {/* Section header */}
+        <Reveal direction="up">
+          <div className="flex items-end justify-between gap-6 pb-6" style={{ borderBottom: '1px solid rgba(245,240,232,0.18)' }}>
+            <div className="flex items-baseline gap-5">
+              <span className="ed-index text-cream/20" style={{ fontSize: 'clamp(2rem, 4vw, 3.4rem)' }}>04</span>
+              <span className="ed-kicker text-cream/55">Our Spirituality</span>
+            </div>
+            <span className="ed-caption text-cream/35 hidden sm:block">Foundations</span>
+          </div>
         </Reveal>
 
-        {/* 3×2 grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-16 lg:gap-x-14 lg:gap-y-20">
+        {/* Title + epigraph */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 mt-14 lg:mt-20">
+          <Reveal direction="up" delay={0.04} className="lg:col-span-6">
+            <h2 className="ed-display text-white-soft" style={{ fontSize: 'clamp(3rem, 8vw, 6.5rem)' }}>
+              Our Six<br />Pillars
+            </h2>
+          </Reveal>
+          <Reveal direction="up" delay={0.08} className="lg:col-span-6 flex flex-col justify-end">
+            <p className="font-cormorant italic text-cream/60 leading-[1.5]" style={{ fontSize: 'clamp(1.15rem, 2vw, 1.5rem)' }}>
+              &ldquo;Over the years, through its constant yearning and seeking, a refreshing spirituality has emerged within the Jesus Youth movement - drawn from the spirit of the Catholic Charismatic Renewal and the rich traditions of the Church.&rdquo;
+            </p>
+            <p className="ed-caption text-cream/35 mt-5">— Jesus Youth International</p>
+          </Reveal>
+        </div>
+
+        {/* Numbered list */}
+        <div className="mt-20 lg:mt-28">
           {SIX_PILLARS.map((pillar, i) => (
-            <motion.div
-              key={pillar.title}
-              custom={i}
-              variants={cardVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.3 }}
-              className="group flex flex-col items-center text-center gap-6"
-            >
-              {/* Circle photo with concentric gold ring */}
-              <div className="relative flex-shrink-0">
-                <div
-                  className="absolute -inset-2.5 rounded-full pointer-events-none transition-all duration-500 group-hover:-inset-3.5"
-                  style={{ border: '1px solid rgba(222,185,106,0.28)' }}
-                />
-                <div
-                  className="w-36 h-36 lg:w-44 lg:h-44 rounded-full overflow-hidden relative transition-all duration-500 group-hover:scale-[1.04]"
-                  style={{ boxShadow: '0 8px 40px rgba(181,55,242,0.18)' }}
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={PILLAR_PHOTOS[i]}
-                    alt={pillar.title}
-                    className="w-full h-full object-cover transition-transform duration-[1200ms] group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 transition-opacity duration-500 group-hover:opacity-40" style={{ background: 'rgba(20,4,31,0.38)' }} />
+            <Reveal key={pillar.title} direction="up" delay={i * 0.04}>
+              <div
+                className="group grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-12 items-center py-10 lg:py-12"
+                style={{
+                  borderTop: '1px solid rgba(245,240,232,0.14)',
+                  borderBottom: i === SIX_PILLARS.length - 1 ? '1px solid rgba(245,240,232,0.14)' : 'none',
+                }}
+              >
+                <div className="lg:col-span-1">
+                  <span className="ed-index text-cream/25 group-hover:text-gold-light transition-colors duration-500" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.4rem)' }}>
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                </div>
+
+                <div className="lg:col-span-4">
+                  <h3 className="font-cormorant font-medium text-white-soft" style={{ fontSize: 'clamp(1.8rem, 3.2vw, 2.8rem)' }}>
+                    {pillar.title}
+                  </h3>
+                </div>
+
+                <div className="lg:col-span-5">
+                  <p className="ed-body text-cream/55 text-base lg:text-lg max-w-md">
+                    {pillar.description}
+                  </p>
+                </div>
+
+                <div className="lg:col-span-2">
+                  <div
+                    className="relative w-full overflow-hidden"
+                    style={{ aspectRatio: '4 / 5', border: '1px solid rgba(245,240,232,0.14)' }}
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={PILLAR_PHOTOS[i]}
+                      alt={pillar.title}
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-110"
+                      style={{ filter: 'grayscale(1)' }}
+                      onMouseEnter={(e) => { e.currentTarget.style.filter = 'grayscale(0)' }}
+                      onMouseLeave={(e) => { e.currentTarget.style.filter = 'grayscale(1)' }}
+                    />
+                  </div>
                 </div>
               </div>
-
-              <h3 className="font-cormorant font-semibold text-white-soft text-xl lg:text-2xl leading-tight">
-                {pillar.title}
-              </h3>
-
-              <p className="font-instrument text-cream/45 text-sm leading-relaxed max-w-[220px]">
-                {pillar.description}
-              </p>
-            </motion.div>
+            </Reveal>
           ))}
         </div>
       </div>

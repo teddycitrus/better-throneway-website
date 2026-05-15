@@ -18,6 +18,12 @@
   --white-soft: #fafaf8;
   --muted: #8a8a9a;
 
+  /* Editorial surfaces */
+  --paper: #f3efe7;       /* warm magazine paper */
+  --paper-deep: #ebe5d8;  /* tinted paper panel */
+  --ink: #161518;         /* near-black editorial ink */
+  --ink-soft: #1f1f22;
+
   /* Fluid type scale */
   --text-xs: clamp(0.75rem, 1.5vw, 0.875rem);
   --text-sm: clamp(0.875rem, 2vw, 1rem);
@@ -32,14 +38,14 @@
 
 @layer base {
   html {
-    background-color: #1f1f22;
-    color: #f5f0e8;
+    background-color: var(--ink);
+    color: var(--cream);
     scroll-behavior: smooth;
   }
 
   body {
-    background-color: #1f1f22;
-    color: #f5f0e8;
+    background-color: var(--ink);
+    color: var(--cream);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -50,8 +56,8 @@
   }
 
   ::-webkit-scrollbar { width: 5px; }
-  ::-webkit-scrollbar-track { background: #1f1f22; }
-  ::-webkit-scrollbar-thumb { background: #3a3a3e; border-radius: 2px; }
+  ::-webkit-scrollbar-track { background: var(--ink); }
+  ::-webkit-scrollbar-thumb { background: #3a3a3e; border-radius: 0; }
   ::-webkit-scrollbar-thumb:hover { background: #52525a; }
 }
 
@@ -67,136 +73,113 @@
     color: rgba(181, 55, 242, 0.75);
   }
 
-  /* Cinematic kicker — section label with a hairline gold rule.
-     Use <p className="cine-kicker">…</p> for a reverent, film-title feel. */
-  .cine-kicker {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.85rem;
+  /* ── Editorial system ──────────────────────────────────────────── */
+
+  /* Kicker: a magazine section label. Pair with .ed-index for "01 — Label". */
+  .ed-kicker {
     font-family: "Instrument Sans", system-ui, sans-serif;
-    font-size: 0.66rem;
+    font-size: 0.7rem;
     font-weight: 600;
-    letter-spacing: 0.34em;
+    letter-spacing: 0.26em;
     text-transform: uppercase;
-    color: rgba(222, 185, 106, 0.85);
-  }
-  .cine-kicker::before {
-    content: "";
-    width: 2.5rem;
-    height: 1px;
-    background: linear-gradient(to right, transparent, rgba(222, 185, 106, 0.7));
-  }
-  .cine-kicker--center { justify-content: center; }
-  .cine-kicker--center::after {
-    content: "";
-    width: 2.5rem;
-    height: 1px;
-    background: linear-gradient(to left, transparent, rgba(222, 185, 106, 0.7));
   }
 
-  /* Cinematic display serif — the big reverent headline voice */
-  .cine-display {
+  /* Big faint section number, set as a sibling of the kicker */
+  .ed-index {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+
+  /* The editorial display voice — oversized tight serif */
+  .ed-display {
     font-family: "Cormorant Garamond", Georgia, serif;
     font-weight: 500;
-    line-height: 0.98;
-    letter-spacing: -0.015em;
+    line-height: 0.94;
+    letter-spacing: -0.02em;
     text-wrap: balance;
   }
 
-  .electric-glow {
-    box-shadow: 0 0 32px rgba(181, 55, 242, 0.35), 0 0 64px rgba(71, 1, 112, 0.2);
+  /* Alternate display: tight grotesque for punchier headers */
+  .ed-display-sans {
+    font-family: "Inter", system-ui, sans-serif;
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
   }
 
-  .purple-orb {
-    position: absolute;
-    border-radius: 9999px;
-    pointer-events: none;
-    filter: blur(80px);
-    background: radial-gradient(circle, rgba(181, 55, 242, 0.25), transparent 70%);
+  /* Editorial body measure */
+  .ed-body {
+    font-family: "Lora", Georgia, serif;
+    line-height: 1.75;
   }
 
-  /* Film grain — fixed, very subtle, sits above backgrounds but below content.
-     Add <div className="film-grain" aria-hidden /> inside a relative section. */
-  .film-grain {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 1;
-    opacity: 0.5;
-    mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.42'/%3E%3C/svg%3E");
-    animation: grain-shift 0.6s steps(2) infinite;
+  /* Tiny uppercase caption / metadata */
+  .ed-caption {
+    font-family: "Instrument Sans", system-ui, sans-serif;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
   }
 
-  /* Cinematic letterbox — soft top/bottom dark fade that frames a section
-     like a film still. Pure CSS, no layout impact. */
-  .cine-frame::before,
-  .cine-frame::after {
+  /* Hairline rule that inherits color via currentColor */
+  .ed-rule {
+    border: 0;
+    border-top: 1px solid currentColor;
+    opacity: 0.22;
+  }
+
+  /* Animated editorial underline link */
+  .ed-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: "Instrument Sans", system-ui, sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding-bottom: 3px;
+  }
+  .ed-link::after {
     content: "";
     position: absolute;
     left: 0;
-    right: 0;
-    height: 14vh;
-    max-height: 130px;
-    pointer-events: none;
-    z-index: 2;
-  }
-  .cine-frame::before {
-    top: 0;
-    background: linear-gradient(to bottom, rgba(10, 4, 18, 0.85), transparent);
-  }
-  .cine-frame::after {
     bottom: 0;
-    background: linear-gradient(to top, rgba(10, 4, 18, 0.9), transparent);
+    width: 100%;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(1);
+    transform-origin: left;
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
   }
+  .ed-link:hover::after { transform: scaleX(0); transform-origin: right; }
 
-  /* Heavy edge vignette to pull the eye toward the center of a frame */
-  .cine-vignette {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 1;
-    background: radial-gradient(ellipse at center, transparent 38%, rgba(8, 3, 16, 0.55) 100%);
-  }
-
-  /* Volumetric god-ray — a soft angled shaft of warm light */
-  .god-ray {
-    position: absolute;
-    pointer-events: none;
-    z-index: 1;
-    filter: blur(60px);
-    background: conic-gradient(
-      from 210deg at 50% 0%,
-      transparent 0deg,
-      rgba(222, 185, 106, 0.16) 18deg,
-      rgba(181, 55, 242, 0.1) 30deg,
-      transparent 46deg
-    );
-  }
-
-  .kenburns {
-    animation: kenburns 18s ease-out both;
-    will-change: transform;
-  }
-
+  /* ── Buttons (editorial: crisp, square, no glow) ──────────────── */
   .btn-primary {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     font-family: "Instrument Sans", system-ui, sans-serif;
-    font-size: 0.7rem;
+    font-size: 0.72rem;
     font-weight: 600;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    padding: 14px 32px;
-    background-color: #6740AA;
-    color: #ffffff;
-    border-radius: 2px;
-    transition: all 0.25s ease;
+    padding: 16px 34px;
+    background-color: var(--ink);
+    color: var(--white-soft);
+    border: 1px solid var(--ink);
+    border-radius: 0;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
   .btn-primary:hover {
-    background-color: #8B52D4;
-    box-shadow: 0 0 28px rgba(139, 82, 212, 0.45);
+    background-color: #b537f2;
+    border-color: #b537f2;
+    color: #ffffff;
   }
 
   .btn-ghost {
@@ -204,33 +187,18 @@
     align-items: center;
     justify-content: center;
     font-family: "Instrument Sans", system-ui, sans-serif;
-    font-size: 0.7rem;
+    font-size: 0.72rem;
     font-weight: 500;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
-    padding: 13px 32px;
-    border: 1px solid rgba(245, 240, 232, 0.35);
-    color: #f5f0e8;
-    border-radius: 2px;
-    transition: all 0.25s ease;
+    padding: 15px 34px;
+    border: 1px solid currentColor;
+    background: transparent;
+    border-radius: 0;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
   .btn-ghost:hover {
-    border-color: rgba(181, 55, 242, 0.7);
-    background-color: rgba(181, 55, 242, 0.08);
+    background-color: currentColor;
   }
-}
-
-@keyframes grain-shift {
-  0%   { transform: translate(0, 0); }
-  100% { transform: translate(-6%, 4%); }
-}
-
-@keyframes kenburns {
-  0%   { transform: scale(1.04) translate(0, 0); }
-  100% { transform: scale(1.16) translate(-1.5%, -1.5%); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .film-grain,
-  .kenburns { animation: none; }
+  .btn-ghost:hover > * { color: var(--ink); }
 }
