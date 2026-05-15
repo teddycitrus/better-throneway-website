@@ -5,9 +5,7 @@ import { motion } from 'framer-motion'
 import { MapPin, Clock, Users } from 'lucide-react'
 import { UPCOMING_EVENTS } from '@/lib/constants'
 
-// Heights poster blue palette
 const NAVY = '#0a1628'
-const BLUE_MID = '#0d2241'
 const MAYA = '#67C8FC'
 
 export default function EventSpotlight() {
@@ -95,60 +93,33 @@ export default function EventSpotlight() {
             </Link>
           </motion.div>
 
-          {/* Right — Poster card (navy/blue themed) */}
+          {/* Right — Actual Heights poster */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="lg:col-span-2"
+            className="lg:col-span-2 flex justify-center lg:justify-end"
           >
             <div
-              className="relative rounded-sm overflow-hidden"
+              className="relative rounded-sm overflow-hidden w-full"
               style={{
-                background: `linear-gradient(160deg, ${BLUE_MID} 0%, ${NAVY} 55%, #0e1f38 100%)`,
-                aspectRatio: '3/4',
-                maxHeight: '480px',
-                boxShadow: `0 0 60px ${MAYA}22, 0 20px 60px rgba(0,0,0,0.6)`,
+                maxWidth: '380px',
                 border: `1px solid ${MAYA}25`,
               }}
             >
-              {/* Topographic texture */}
-              <div className="absolute inset-0 opacity-20" style={{
-                backgroundImage: `repeating-radial-gradient(ellipse at 50% 40%, transparent 0, transparent 22px, ${MAYA}08 22px, ${MAYA}08 24px)`,
-              }} />
-              {/* Top blue glow */}
-              <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse at 50% 15%, ${MAYA}28 0%, transparent 55%)` }} />
-              <div className="absolute top-0 inset-x-0 h-px" style={{ background: `linear-gradient(to right, transparent, ${MAYA}80, transparent)` }} />
-              <div className="absolute bottom-0 inset-x-0 h-px" style={{ background: `linear-gradient(to right, transparent, rgba(196,151,58,0.3), transparent)` }} />
-
-              <div className="relative h-full flex flex-col items-center justify-between p-8 text-center">
-                <p className="font-instrument text-[9px] tracking-[0.35em] uppercase" style={{ color: 'rgba(196,151,58,0.8)' }}>Throneway Presents</p>
-
-                <div className="flex flex-col items-center gap-4">
-                  <div style={{ opacity: 0.25 }}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src="/logos/LOGO White.png" alt="" className="w-14 h-14 object-contain" />
-                  </div>
-                  <div>
-                    <p className="font-nunito font-bold text-white-soft" style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.2rem)' }}>Throneway</p>
-                    <p className="font-nunito font-extrabold" style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.2rem)', color: MAYA }}>Heights</p>
-                  </div>
-                  <p className="font-instrument italic text-cream/45 text-sm">Faith &middot; Music &middot; Fellowship</p>
-                </div>
-
-                <div className="flex flex-col items-center gap-2.5 w-full">
-                  <div className="w-full h-px" style={{ background: `${MAYA}25` }} />
-                  <p className="font-instrument text-xs tracking-[0.14em] uppercase text-cream/70">Every other Friday &bull; 7–9 PM</p>
-                  <p className="font-instrument text-[10px] tracking-[0.12em] uppercase text-muted">St. Gregory&apos;s Parish, Etobicoke</p>
-                  <span
-                    className="font-instrument text-[10px] tracking-[0.2em] uppercase px-3 py-1 rounded-sm mt-1"
-                    style={{ border: `1px solid ${MAYA}60`, color: MAYA }}
-                  >
-                    18+
-                  </span>
-                </div>
-              </div>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/heights-poster.png"
+                alt="Throneway Heights poster"
+                className="w-full block"
+              />
+              <div
+                className="absolute inset-0"
+                style={{
+                  background: `linear-gradient(to bottom, rgba(10,22,40,0.15) 0%, transparent 15%), linear-gradient(to right, rgba(10,22,40,0.3) 0%, transparent 30%)`,
+                }}
+              />
             </div>
           </motion.div>
         </div>

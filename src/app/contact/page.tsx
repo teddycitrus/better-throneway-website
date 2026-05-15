@@ -5,14 +5,6 @@ import { motion } from 'framer-motion'
 import { MapPin, Mail, Clock } from 'lucide-react'
 import { SOCIAL_LINKS } from '@/lib/constants'
 
-const SUBJECTS = [
-  'General Inquiry',
-  'Events & Booking',
-  'Press & Media',
-  'Volunteer with Us',
-  'Prayer Request',
-  'Other',
-]
 
 function SocialIcon({ icon }: { icon: string }) {
   if (icon === 'instagram') return (
@@ -46,7 +38,7 @@ function SocialIcon({ icon }: { icon: string }) {
 }
 
 export default function ContactPage() {
-  const [form, setForm] = useState({ name: '', email: '', subject: SUBJECTS[0], message: '' })
+  const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
 
@@ -133,7 +125,7 @@ export default function ContactPage() {
                     Thanks for reaching out. We&apos;ll get back to you within 1–2 business days.
                   </p>
                   <button
-                    onClick={() => { setSubmitted(false); setForm({ name: '', email: '', subject: SUBJECTS[0], message: '' }) }}
+                    onClick={() => { setSubmitted(false); setForm({ name: '', email: '', subject: '', message: '' }) }}
                     className="font-instrument text-sm tracking-[0.1em] uppercase transition-colors duration-200 mt-2"
                     style={{ color: '#B537F2' }}
                   >
@@ -175,17 +167,17 @@ export default function ContactPage() {
 
                   <div className="flex flex-col gap-1.5">
                     <label className="font-instrument text-xs tracking-[0.12em] uppercase text-void/55">
-                      Subject
+                      Subject <span style={{ color: '#B537F2' }}>*</span>
                     </label>
-                    <select
+                    <input
+                      type="text"
                       name="subject"
+                      required
+                      placeholder="What is this about?"
                       value={form.subject}
                       onChange={handleChange}
                       className={inputClass}
-                      style={{ appearance: 'none', cursor: 'pointer' }}
-                    >
-                      {SUBJECTS.map(s => <option key={s} value={s}>{s}</option>)}
-                    </select>
+                    />
                   </div>
 
                   <div className="flex flex-col gap-1.5">

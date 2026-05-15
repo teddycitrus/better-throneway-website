@@ -129,43 +129,21 @@ export default function EventsPage() {
             >
               <div className="grid grid-cols-1 lg:grid-cols-5">
 
-                {/* Left — Poster */}
+                {/* Left — Actual Heights poster */}
                 <div
-                  className="lg:col-span-2 relative flex flex-col items-center justify-center p-10 text-center"
-                  style={{ borderRight: `1px solid ${MAYA}20` }}
+                  className="lg:col-span-2 relative overflow-hidden"
+                  style={{ borderRight: `1px solid ${MAYA}20`, minHeight: '420px' }}
                 >
-                  <div className="absolute inset-0 opacity-15" style={{
-                    backgroundImage: `repeating-radial-gradient(ellipse at 50% 40%, transparent 0, transparent 22px, ${MAYA}08 22px, ${MAYA}08 24px)`,
-                  }} />
-                  <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse at 50% 20%, ${MAYA}20 0%, transparent 55%)` }} />
-
-                  <div className="relative flex flex-col items-center gap-5 py-6">
-                    <p className="font-instrument text-[9px] tracking-[0.35em] uppercase" style={{ color: 'rgba(196,151,58,0.8)' }}>Throneway Presents</p>
-
-                    <div className="opacity-20">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src="/logos/LOGO White.png" alt="" className="w-16 h-16 object-contain" />
-                    </div>
-
-                    <div>
-                      <p className="font-nunito font-bold text-white-soft" style={{ fontSize: 'clamp(1.8rem, 3vw, 2.6rem)' }}>Throneway</p>
-                      <p className="font-nunito font-extrabold" style={{ fontSize: 'clamp(1.8rem, 3vw, 2.6rem)', color: MAYA }}>Heights</p>
-                    </div>
-
-                    <p className="font-instrument italic text-cream/45 text-sm">Faith &middot; Music &middot; Fellowship</p>
-
-                    <div className="flex flex-col items-center gap-2 w-full pt-2">
-                      <div className="w-full h-px" style={{ background: `${MAYA}25` }} />
-                      <p className="font-instrument text-xs tracking-[0.14em] uppercase text-cream/70 mt-2">Every other Friday &bull; 7–9 PM</p>
-                      <p className="font-instrument text-[10px] tracking-[0.12em] uppercase text-muted">St. Gregory&apos;s Parish, Etobicoke</p>
-                      <span
-                        className="font-instrument text-[10px] tracking-[0.2em] uppercase px-3 py-1 rounded-sm mt-1"
-                        style={{ border: `1px solid ${MAYA}60`, color: MAYA }}
-                      >
-                        18+
-                      </span>
-                    </div>
-                  </div>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/heights-poster.png"
+                    alt="Throneway Heights poster"
+                    className="absolute inset-0 w-full h-full object-cover object-center"
+                  />
+                  <div
+                    className="absolute inset-0"
+                    style={{ background: `linear-gradient(to right, transparent 55%, rgba(10,22,40,0.55) 100%), linear-gradient(to bottom, rgba(10,22,40,0.15) 0%, transparent 15%)` }}
+                  />
                 </div>
 
                 {/* Right — Details */}
