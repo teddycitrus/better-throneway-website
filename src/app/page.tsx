@@ -9,9 +9,9 @@ export default function Home() {
   return (
     <>
       <HeroSection />
+      <WhoWeAre />
       <RunningSection />
       <EventSpotlight />
-      <WhoWeAre />
       <SixPillars />
       <DonateCTA />
     </>

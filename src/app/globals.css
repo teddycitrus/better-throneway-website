@@ -67,6 +67,42 @@
     color: rgba(181, 55, 242, 0.75);
   }
 
+  /* Cinematic kicker — section label with a hairline gold rule.
+     Use <p className="cine-kicker">…</p> for a reverent, film-title feel. */
+  .cine-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.85rem;
+    font-family: "Instrument Sans", system-ui, sans-serif;
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: rgba(222, 185, 106, 0.85);
+  }
+  .cine-kicker::before {
+    content: "";
+    width: 2.5rem;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(222, 185, 106, 0.7));
+  }
+  .cine-kicker--center { justify-content: center; }
+  .cine-kicker--center::after {
+    content: "";
+    width: 2.5rem;
+    height: 1px;
+    background: linear-gradient(to left, transparent, rgba(222, 185, 106, 0.7));
+  }
+
+  /* Cinematic display serif — the big reverent headline voice */
+  .cine-display {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-weight: 500;
+    line-height: 0.98;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
   .electric-glow {
     box-shadow: 0 0 32px rgba(181, 55, 242, 0.35), 0 0 64px rgba(71, 1, 112, 0.2);
   }
@@ -77,6 +113,70 @@
     pointer-events: none;
     filter: blur(80px);
     background: radial-gradient(circle, rgba(181, 55, 242, 0.25), transparent 70%);
+  }
+
+  /* Film grain — fixed, very subtle, sits above backgrounds but below content.
+     Add <div className="film-grain" aria-hidden /> inside a relative section. */
+  .film-grain {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.5;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.42'/%3E%3C/svg%3E");
+    animation: grain-shift 0.6s steps(2) infinite;
+  }
+
+  /* Cinematic letterbox — soft top/bottom dark fade that frames a section
+     like a film still. Pure CSS, no layout impact. */
+  .cine-frame::before,
+  .cine-frame::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 14vh;
+    max-height: 130px;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .cine-frame::before {
+    top: 0;
+    background: linear-gradient(to bottom, rgba(10, 4, 18, 0.85), transparent);
+  }
+  .cine-frame::after {
+    bottom: 0;
+    background: linear-gradient(to top, rgba(10, 4, 18, 0.9), transparent);
+  }
+
+  /* Heavy edge vignette to pull the eye toward the center of a frame */
+  .cine-vignette {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background: radial-gradient(ellipse at center, transparent 38%, rgba(8, 3, 16, 0.55) 100%);
+  }
+
+  /* Volumetric god-ray — a soft angled shaft of warm light */
+  .god-ray {
+    position: absolute;
+    pointer-events: none;
+    z-index: 1;
+    filter: blur(60px);
+    background: conic-gradient(
+      from 210deg at 50% 0%,
+      transparent 0deg,
+      rgba(222, 185, 106, 0.16) 18deg,
+      rgba(181, 55, 242, 0.1) 30deg,
+      transparent 46deg
+    );
+  }
+
+  .kenburns {
+    animation: kenburns 18s ease-out both;
+    will-change: transform;
   }
 
   .btn-primary {
@@ -118,4 +218,19 @@
     border-color: rgba(181, 55, 242, 0.7);
     background-color: rgba(181, 55, 242, 0.08);
   }
+}
+
+@keyframes grain-shift {
+  0%   { transform: translate(0, 0); }
+  100% { transform: translate(-6%, 4%); }
+}
+
+@keyframes kenburns {
+  0%   { transform: scale(1.04) translate(0, 0); }
+  100% { transform: scale(1.16) translate(-1.5%, -1.5%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .film-grain,
+  .kenburns { animation: none; }
 }

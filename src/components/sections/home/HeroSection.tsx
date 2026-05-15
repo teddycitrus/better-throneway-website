@@ -1,9 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion'
 import { RUNNING_SINGLE } from '@/lib/constants'
 
 const HERO_IMAGES = [
@@ -15,21 +15,35 @@ const HERO_IMAGES = [
   { src: '/photos/Image.126.JPG', alt: 'Throneway band performing on stage' },
 ]
 
+const REVERENT_EASE = [0.16, 1, 0.3, 1] as const
+
 export default function HeroSection() {
   const [current, setCurrent] = useState(0)
   const [timerKey, setTimerKey] = useState(0)
+  const sectionRef = useRef<HTMLElement>(null)
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end start'],
+  })
+  // Content drifts up and fades as you scroll away — a slow cinematic exit.
+  const contentY = useTransform(scrollYProgress, [0, 1], ['0%', '-22%'])
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0])
 
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrent((i) => (i + 1) % HERO_IMAGES.length)
-    }, 5500)
+    }, 6500)
     return () => clearInterval(timer)
   }, [timerKey])
 
   return (
-    <section className="relative w-full h-[100svh] min-h-[640px] flex items-center justify-center overflow-hidden">
+    <section
+      ref={sectionRef}
+      className="cine-frame relative w-full h-[100svh] min-h-[640px] flex items-center justify-center overflow-hidden"
+    >
 
-      {/* Slideshow background */}
+      {/* Slideshow background — slow Ken Burns push on the active frame */}
       <div className="absolute inset-0">
         <AnimatePresence>
           {HERO_IMAGES.map((img, i) =>
@@ -40,129 +54,128 @@ export default function HeroSection() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 1.8, ease: 'easeInOut' }}
+                transition={{ duration: 2.4, ease: 'easeInOut' }}
               >
-                <Image
-                  src={img.src}
-                  alt={img.alt}
-                  fill
-                  priority={i === 0}
-                  quality={85}
-                  className="object-cover object-center scale-105"
-                  sizes="100vw"
-                />
+                <div className="kenburns absolute inset-0">
+                  <Image
+                    src={img.src}
+                    alt={img.alt}
+                    fill
+                    priority={i === 0}
+                    className="object-cover object-center"
+                    sizes="100vw"
+                  />
+                </div>
               </motion.div>
             ) : null
           )}
         </AnimatePresence>
       </div>
 
-      {/* Permanent top vignette — keeps navbar text readable at all times */}
-      <div
-        className="absolute inset-x-0 top-0 h-40 pointer-events-none z-[1]"
-        style={{ background: 'linear-gradient(to bottom, rgba(31,31,34,0.75) 0%, transparent 100%)' }}
-      />
-
-      {/* Main overlay */}
+      {/* Atmospheric grade — warm-shadow cinematic overlay */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            'linear-gradient(to bottom, rgba(31,31,34,0.2) 0%, rgba(31,31,34,0.22) 40%, rgba(31,31,34,0.62) 70%, rgba(31,31,34,0.98) 100%)',
+            'linear-gradient(to bottom, rgba(20,8,30,0.34) 0%, rgba(18,6,28,0.30) 38%, rgba(15,4,24,0.66) 72%, rgba(12,3,20,0.98) 100%)',
         }}
       />
+      <div className="cine-vignette" />
+      {/* Volumetric shaft of light from the top */}
       <div
-        className="absolute inset-0"
-        style={{
-          background: 'radial-gradient(ellipse at center, transparent 30%, rgba(31,31,34,0.45) 100%)',
-        }}
+        className="god-ray"
+        style={{ top: '-12%', left: '12%', width: '46%', height: '90%', opacity: 0.7 }}
       />
+      <div className="film-grain" aria-hidden />
 
-      {/* Content — biased upward via pb so it never overlaps the bottom UI */}
-      <div className="relative z-10 flex flex-col items-center text-center px-4 pb-[18vh]">
+      {/* Content */}
+      <motion.div
+        style={{ y: contentY, opacity: contentOpacity }}
+        className="relative z-10 flex flex-col items-center text-center px-4 pb-[16vh]"
+      >
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.1, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-6"
+          initial={{ opacity: 0, scale: 0.92, filter: 'blur(16px)' }}
+          animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+          transition={{ duration: 1.8, delay: 0.35, ease: REVERENT_EASE }}
+          className="mb-7"
         >
           <Image
             src="/logos/LogoFull.png"
             alt="Throneway — Worship through the Arts"
             width={1456}
             height={816}
-            className="w-[78vw] max-w-[920px] h-auto max-h-[40vh] object-contain"
-            style={{ filter: 'brightness(0) invert(1) drop-shadow(0 2px 32px rgba(0,0,0,0.9)) drop-shadow(0 0 12px rgba(0,0,0,0.7))' }}
+            className="w-[80vw] max-w-[940px] h-auto max-h-[42vh] object-contain"
+            style={{ filter: 'brightness(0) invert(1) drop-shadow(0 4px 40px rgba(0,0,0,0.95)) drop-shadow(0 0 18px rgba(0,0,0,0.7))' }}
             priority
           />
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.65 }}
-          className="flex items-center gap-4 mb-8"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, delay: 1.0, ease: REVERENT_EASE }}
+          className="flex items-center gap-5 mb-9"
         >
-          <div className="h-px w-10 sm:w-16 bg-white/20" />
-          <p className="font-instrument text-[9px] sm:text-[10px] tracking-[0.22em] uppercase text-white/75 whitespace-nowrap">
+          <div className="h-px w-12 sm:w-20 bg-gradient-to-r from-transparent to-gold/50" />
+          <p className="font-instrument text-[9px] sm:text-[10px] tracking-[0.32em] uppercase text-cream/80 whitespace-nowrap">
             An Outreach Ministry of Jesus Youth Canada
           </p>
-          <div className="h-px w-10 sm:w-16 bg-white/20" />
+          <div className="h-px w-12 sm:w-20 bg-gradient-to-l from-transparent to-gold/50" />
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 14 }}
+          initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.88 }}
+          transition={{ duration: 1.1, delay: 1.25, ease: REVERENT_EASE }}
           className="flex flex-col sm:flex-row items-center gap-4"
         >
-          <Link href="/events" className="btn-primary min-w-[200px]">
+          <Link href="/events" className="btn-primary min-w-[210px]">
             Join the Community
           </Link>
           <a
             href={RUNNING_SINGLE.spotifyUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-ghost min-w-[200px]"
+            className="btn-ghost min-w-[210px]"
           >
             Check Out Our Music &rarr;
           </a>
         </motion.div>
-      </div>
+      </motion.div>
 
-      {/* Slideshow dots — viewport-relative so it scales with screen height */}
+      {/* Slideshow markers */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 1.2 }}
-        className="absolute left-1/2 -translate-x-1/2 z-10 flex items-center gap-2"
-        style={{ bottom: '11vh' }}
+        transition={{ duration: 1.4, delay: 1.6 }}
+        className="absolute left-1/2 -translate-x-1/2 z-10 flex items-center gap-2.5"
+        style={{ bottom: '10vh' }}
       >
         {HERO_IMAGES.map((_, i) => (
           <button
             key={i}
             onClick={() => { setCurrent(i); setTimerKey((k) => k + 1) }}
             aria-label={`Go to slide ${i + 1}`}
-            className={`transition-all duration-500 rounded-full ${
+            className={`transition-all duration-700 rounded-full ${
               i === current
-                ? 'w-6 h-1 bg-white/65'
-                : 'w-1.5 h-1.5 bg-white/25 hover:bg-white/45'
+                ? 'w-8 h-[3px] bg-gold/80'
+                : 'w-[3px] h-[3px] bg-white/30 hover:bg-white/55'
             }`}
           />
         ))}
       </motion.div>
 
-      {/* Scroll indicator — pinned near bottom, also viewport-relative */}
+      {/* Scroll cue */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 1.6 }}
-        className="absolute left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
+        transition={{ duration: 1.4, delay: 2.0 }}
+        className="absolute left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2.5"
         style={{ bottom: '3vh' }}
       >
-        <span className="font-instrument text-[9px] tracking-[0.28em] uppercase text-white/30">Scroll</span>
-        <div className="w-px h-7 bg-gradient-to-b from-white/30 to-transparent animate-scroll-bounce" />
+        <span className="font-instrument text-[9px] tracking-[0.4em] uppercase text-white/35">Scroll</span>
+        <div className="w-px h-9 bg-gradient-to-b from-gold/40 to-transparent animate-scroll-bounce" />
       </motion.div>
     </section>
   )

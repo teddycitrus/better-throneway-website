@@ -1,7 +1,9 @@
 'use client'
 
+import { useRef } from 'react'
 import Image from 'next/image'
-import { motion } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
+import Reveal from '@/components/ui/Reveal'
 import { RUNNING_SINGLE } from '@/lib/constants'
 
 function SpotifyIcon() {
@@ -44,36 +46,58 @@ const PLATFORMS = [
 ]
 
 export default function RunningSection() {
+  const sectionRef = useRef<HTMLElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  })
+  // Ghosted oversized title drifts behind the content like a film card.
+  const titleX = useTransform(scrollYProgress, [0, 1], ['6%', '-6%'])
+
   return (
     <section
-      className="relative overflow-hidden py-20 lg:py-28"
-      style={{ background: 'linear-gradient(to bottom, #1f1f22 0%, #0e0018 45%, #0a1628 100%)' }}
+      ref={sectionRef}
+      className="cine-frame relative overflow-hidden py-24 lg:py-36"
+      style={{ background: 'linear-gradient(to bottom, #14041f 0%, #0e0018 42%, #0a1628 100%)' }}
     >
       <div
         className="absolute pointer-events-none"
         style={{
-          top: '50%', left: '22%',
+          top: '46%', left: '24%',
           transform: 'translate(-50%, -50%)',
-          width: '600px', height: '600px',
-          background: 'radial-gradient(circle, rgba(181,55,242,0.12) 0%, rgba(71,1,112,0.06) 50%, transparent 70%)',
-          filter: 'blur(50px)',
+          width: '720px', height: '720px',
+          background: 'radial-gradient(circle, rgba(181,55,242,0.16) 0%, rgba(71,1,112,0.07) 50%, transparent 70%)',
+          filter: 'blur(60px)',
           borderRadius: '9999px',
         }}
       />
+      <div className="film-grain" aria-hidden />
 
-      <div className="relative max-w-[1280px] mx-auto px-5 sm:px-8 lg:px-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+      {/* Oversized ghost wordmark — cinematic title-card backdrop */}
+      <motion.span
+        aria-hidden
+        style={{ x: titleX }}
+        className="pointer-events-none select-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-cormorant font-bold whitespace-nowrap z-[1]"
+      >
+        <span
+          className="block leading-none"
+          style={{
+            fontSize: 'clamp(8rem, 26vw, 24rem)',
+            color: 'transparent',
+            WebkitTextStroke: '1px rgba(222,185,106,0.07)',
+          }}
+        >
+          Running
+        </span>
+      </motion.span>
 
-          <motion.div
-            initial={{ opacity: 0, x: -28 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
-            className="relative order-2 lg:order-1"
-          >
+      <div className="relative z-[3] max-w-[1280px] mx-auto px-5 sm:px-8 lg:px-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+
+          <Reveal direction="right" blur duration={1.3} className="relative order-2 lg:order-1">
             <div
-              className="relative aspect-square rounded-sm overflow-hidden max-w-[480px] mx-auto lg:mx-0"
-              style={{ boxShadow: '0 0 60px rgba(181,55,242,0.18), 0 24px 80px rgba(0,0,0,0.7)' }}
+              className="relative aspect-square rounded-sm overflow-hidden max-w-[480px] mx-auto lg:mx-0 animate-slow-float"
+              style={{ boxShadow: '0 0 80px rgba(181,55,242,0.28), 0 30px 90px rgba(0,0,0,0.75)' }}
             >
               <Image
                 src="/running-cover.png"
@@ -82,71 +106,75 @@ export default function RunningSection() {
                 className="object-cover"
                 sizes="(max-width: 1024px) 90vw, 45vw"
               />
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 28 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.85, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
-            className="flex flex-col gap-6 order-1 lg:order-2"
-          >
-            <p className="section-label" style={{ color: 'rgba(196,151,58,0.85)' }}>Debut Single</p>
-
-            <h2
-              className="font-cormorant font-bold text-white-soft leading-none tracking-tight"
-              style={{ fontSize: 'clamp(3.2rem, 7vw, 6.5rem)' }}
-            >
-              Running
-            </h2>
-
-            <p className="font-instrument text-cream/70 text-lg leading-relaxed max-w-sm">
-              {RUNNING_SINGLE.description}
-            </p>
-
-            <div className="overflow-hidden rounded-sm mt-1">
-              <iframe
-                src={`${RUNNING_SINGLE.spotifyEmbedUrl}?utm_source=generator&theme=0`}
-                width="100%"
-                height="152"
-                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                loading="lazy"
-                style={{ border: 'none', borderRadius: '4px', display: 'block' }}
-                title="Running by Throneway on Spotify"
+              <div
+                className="absolute -inset-px rounded-sm pointer-events-none"
+                style={{ border: '1px solid rgba(222,185,106,0.25)' }}
               />
             </div>
+          </Reveal>
 
-            {/* Streaming platforms */}
-            <div className="flex flex-col gap-3 pt-1">
-              <p className="font-instrument text-[10px] tracking-[0.2em] uppercase text-muted">
-                Available on all platforms
+          <div className="flex flex-col gap-7 order-1 lg:order-2">
+            <Reveal direction="left">
+              <p className="cine-kicker mb-6">Debut Single</p>
+              <h2
+                className="cine-display text-white-soft"
+                style={{ fontSize: 'clamp(3.6rem, 8vw, 7rem)' }}
+              >
+                Running
+              </h2>
+            </Reveal>
+
+            <Reveal direction="up" delay={0.1}>
+              <p className="font-lora italic text-cream/65 text-lg lg:text-xl leading-relaxed max-w-md">
+                {RUNNING_SINGLE.description}
               </p>
-              <div className="flex flex-wrap gap-2">
-                {PLATFORMS.map(({ name, href, Icon }) => (
-                  <a
-                    key={name}
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 font-instrument text-[11px] tracking-[0.08em] px-3 py-2 rounded-sm transition-all duration-200 group"
-                    style={{ border: '1px solid rgba(245,240,232,0.15)', color: 'rgba(245,240,232,0.5)' }}
-                    onMouseEnter={e => {
-                      e.currentTarget.style.borderColor = 'rgba(245,240,232,0.4)'
-                      e.currentTarget.style.color = 'rgba(245,240,232,0.9)'
-                    }}
-                    onMouseLeave={e => {
-                      e.currentTarget.style.borderColor = 'rgba(245,240,232,0.15)'
-                      e.currentTarget.style.color = 'rgba(245,240,232,0.5)'
-                    }}
-                  >
-                    <Icon />
-                    {name}
-                  </a>
-                ))}
+            </Reveal>
+
+            <Reveal direction="up" delay={0.18}>
+              <div className="overflow-hidden rounded-sm mt-1 max-w-md" style={{ border: '1px solid rgba(222,185,106,0.14)' }}>
+                <iframe
+                  src={`${RUNNING_SINGLE.spotifyEmbedUrl}?utm_source=generator&theme=0`}
+                  width="100%"
+                  height="152"
+                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                  loading="lazy"
+                  style={{ border: 'none', borderRadius: '4px', display: 'block' }}
+                  title="Running by Throneway on Spotify"
+                />
               </div>
-            </div>
-          </motion.div>
+            </Reveal>
+
+            <Reveal direction="up" delay={0.26}>
+              <div className="flex flex-col gap-4 pt-1">
+                <p className="font-instrument text-[10px] tracking-[0.28em] uppercase text-cream/40">
+                  Available on all platforms
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {PLATFORMS.map(({ name, href, Icon }) => (
+                    <a
+                      key={name}
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 font-instrument text-[11px] tracking-[0.08em] px-3.5 py-2.5 rounded-sm transition-all duration-300 group"
+                      style={{ border: '1px solid rgba(245,240,232,0.12)', color: 'rgba(245,240,232,0.45)' }}
+                      onMouseEnter={e => {
+                        e.currentTarget.style.borderColor = 'rgba(222,185,106,0.5)'
+                        e.currentTarget.style.color = 'rgba(245,240,232,0.92)'
+                      }}
+                      onMouseLeave={e => {
+                        e.currentTarget.style.borderColor = 'rgba(245,240,232,0.12)'
+                        e.currentTarget.style.color = 'rgba(245,240,232,0.45)'
+                      }}
+                    >
+                      <Icon />
+                      {name}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </Reveal>
+          </div>
         </div>
       </div>
     </section>

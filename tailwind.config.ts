@@ -46,11 +46,21 @@ const config: Config = {
           "0%": { opacity: "0", transform: "translateY(24px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
+        "slow-float": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-14px)" },
+        },
+        "sheen": {
+          "0%": { transform: "translateX(-120%) skewX(-12deg)" },
+          "60%, 100%": { transform: "translateX(220%) skewX(-12deg)" },
+        },
       },
       animation: {
         "glow-pulse": "glow-pulse 3s ease-in-out infinite",
         "scroll-bounce": "scroll-bounce 2s ease-in-out infinite",
         "fade-up": "fade-up 0.6s ease-out forwards",
+        "slow-float": "slow-float 7s ease-in-out infinite",
+        "sheen": "sheen 6s ease-in-out infinite",
       },
     },
   },

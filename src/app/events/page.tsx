@@ -1,9 +1,11 @@
 'use client'
 
+import { useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import { MapPin, Clock, Users, Calendar, ArrowRight } from 'lucide-react'
+import Reveal from '@/components/ui/Reveal'
 import { UPCOMING_EVENTS, PAST_EVENTS, SOCIAL_LINKS } from '@/lib/constants'
 
 const NAVY = '#0a1628'
@@ -41,98 +43,91 @@ function SocialIcon({ icon }: { icon: string }) {
   return null
 }
 
+function EventsHero() {
+  const ref = useRef<HTMLElement>(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
+  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '24%'])
+  const bgScale = useTransform(scrollYProgress, [0, 1], [1.08, 1.2])
+  const contentY = useTransform(scrollYProgress, [0, 1], ['0%', '-18%'])
+
+  return (
+    <section ref={ref} className="cine-frame relative overflow-hidden" style={{ minHeight: '74vh' }}>
+      <motion.div className="absolute inset-[-10%]" style={{ y: bgY, scale: bgScale }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/photos/Image.193.JPG" alt="" className="w-full h-full object-cover object-center" aria-hidden />
+      </motion.div>
+      <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(12,3,22,0.70) 0%, rgba(12,3,22,0.82) 55%, rgba(10,2,18,0.98) 100%)' }} />
+      <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 50% 55%, rgba(222,185,106,0.12) 0%, transparent 62%)' }} />
+      <div className="cine-vignette" />
+      <div className="film-grain" aria-hidden />
+
+      <div className="relative z-[3] max-w-[1280px] mx-auto px-5 sm:px-8 lg:px-10 flex items-center" style={{ minHeight: '74vh' }}>
+        <motion.div style={{ y: contentY }} className="pt-32 pb-20">
+          <motion.div
+            initial={{ opacity: 0, y: 26, filter: 'blur(12px)' }}
+            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <p className="cine-kicker mb-6">Gatherings &amp; Events</p>
+            <h1
+              className="cine-display text-white-soft"
+              style={{ fontSize: 'clamp(3.2rem, 9vw, 7rem)' }}
+            >
+              Where faith<br />
+              <span className="italic" style={{ color: '#DEB96A' }}>comes alive.</span>
+            </h1>
+            <p className="font-lora text-cream/65 text-lg lg:text-xl mt-7 max-w-xl leading-relaxed">
+              From weekly gatherings to large-scale conferences, every Throneway event is designed to bring you deeper - in worship, in community, and in faith.
+            </p>
+          </motion.div>
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
 export default function EventsPage() {
   const upcoming = UPCOMING_EVENTS[0]
 
   return (
     <main className="min-h-screen bg-void">
 
-      {/* ── Hero ── */}
-      <section className="relative overflow-hidden" style={{ minHeight: '52vh' }}>
-        <div className="absolute inset-0">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/photos/Image.193.JPG" alt="" className="w-full h-full object-cover object-center" aria-hidden />
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(13,0,24,0.72) 0%, rgba(13,0,24,0.85) 60%, rgba(13,0,24,0.97) 100%)' }} />
-          <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at 50% 60%, rgba(181,55,242,0.12) 0%, transparent 65%)' }} />
-        </div>
+      <EventsHero />
 
-        <div className="relative max-w-[1280px] mx-auto px-5 sm:px-8 lg:px-10 pt-40 pb-24">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <p className="section-label mb-4">Gatherings & Events</p>
-            <h1
-              className="font-nunito font-extrabold text-white-soft leading-none"
-              style={{ fontSize: 'clamp(3rem, 8vw, 6rem)' }}
-            >
-              Where faith<br />
-              <span style={{ color: '#B537F2' }}>comes alive.</span>
-            </h1>
-            <p className="font-instrument text-cream/60 text-lg mt-6 max-w-xl leading-relaxed">
-              From weekly gatherings to large-scale conferences, every Throneway event is designed to bring you deeper - in worship, in community, and in faith.
-            </p>
-          </motion.div>
-        </div>
-
-        <div className="absolute inset-x-0 bottom-0 h-px" style={{ background: 'linear-gradient(to right, transparent, rgba(181,55,242,0.3), transparent)' }} />
-      </section>
-
-      {/* ── Upcoming Events ── */}
-      <section className="relative overflow-hidden py-20 lg:py-28" style={{ background: NAVY }}>
-        {/* Photo background */}
+      {/* ── Ongoing — Heights featured ── */}
+      <section className="cine-frame relative overflow-hidden py-24 lg:py-32" style={{ background: NAVY }}>
         <div className="absolute inset-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/photos/Image.81.JPG" alt="" className="w-full h-full object-cover object-center" aria-hidden />
-          <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, rgba(10,22,40,0.95) 0%, rgba(13,34,65,0.90) 40%, rgba(10,22,40,0.97) 100%)` }} />
-          <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse at 60% 40%, rgba(103,200,252,0.06) 0%, transparent 60%)` }} />
+          <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, rgba(8,16,30,0.96) 0%, rgba(11,28,54,0.90) 40%, rgba(8,16,30,0.98) 100%)` }} />
+          <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse at 60% 40%, rgba(103,200,252,0.07) 0%, transparent 60%)` }} />
         </div>
+        <div className="cine-vignette" />
+        <div className="film-grain" aria-hidden />
 
-        {/* Contour lines */}
-        <div
-          className="absolute inset-0 pointer-events-none opacity-15"
-          style={{ backgroundImage: `repeating-radial-gradient(ellipse at 60% 50%, transparent 0px, transparent 48px, rgba(103,200,252,0.05) 48px, rgba(103,200,252,0.05) 50px)` }}
-        />
-        <div className="absolute inset-x-0 top-0 h-px" style={{ background: `linear-gradient(to right, transparent, ${MAYA}33, transparent)` }} />
-        <div className="absolute inset-x-0 bottom-0 h-px" style={{ background: `linear-gradient(to right, transparent, ${MAYA}1a, transparent)` }} />
+        <div className="relative z-[3] max-w-[1280px] mx-auto px-5 sm:px-8 lg:px-10">
 
-        <div className="relative max-w-[1280px] mx-auto px-5 sm:px-8 lg:px-10">
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-            className="mb-14"
-          >
-            <p className="section-label mb-3">Ongoing</p>
-            <h2 className="font-nunito font-extrabold text-white-soft leading-none" style={{ fontSize: 'clamp(2.4rem, 5vw, 4rem)' }}>
+          <Reveal direction="up" className="mb-16">
+            <p className="cine-kicker mb-4" style={{ color: 'rgba(103,200,252,0.85)' }}>Ongoing</p>
+            <h2 className="cine-display text-white-soft" style={{ fontSize: 'clamp(2.6rem, 5.5vw, 4.4rem)' }}>
               Regular Gatherings
             </h2>
-          </motion.div>
+          </Reveal>
 
-          {/* Heights Card — full-width featured */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.75, delay: 0.1 }}
-          >
+          <Reveal direction="up" delay={0.1} blur duration={1.2}>
             <div
               className="rounded-sm overflow-hidden"
               style={{
                 border: `1px solid ${MAYA}25`,
                 background: `linear-gradient(160deg, ${BLUE_MID} 0%, ${NAVY} 60%, #0e1f38 100%)`,
-                boxShadow: `0 0 60px ${MAYA}18, 0 20px 60px rgba(0,0,0,0.5)`,
+                boxShadow: `0 0 70px ${MAYA}1a, 0 28px 70px rgba(0,0,0,0.55)`,
               }}
             >
               <div className="grid grid-cols-1 lg:grid-cols-5">
 
-                {/* Left — Actual Heights poster */}
                 <div
                   className="lg:col-span-2 relative overflow-hidden"
-                  style={{ borderRight: `1px solid ${MAYA}20`, minHeight: '420px' }}
+                  style={{ borderRight: `1px solid ${MAYA}20`, minHeight: '440px' }}
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
@@ -146,32 +141,31 @@ export default function EventsPage() {
                   />
                 </div>
 
-                {/* Right — Details */}
-                <div className="lg:col-span-3 flex flex-col justify-center gap-6 p-10 lg:p-14">
-                  <p className="font-instrument text-[11px] tracking-[0.2em] uppercase" style={{ color: MAYA }}>
+                <div className="lg:col-span-3 flex flex-col justify-center gap-6 p-10 lg:p-16">
+                  <p className="font-instrument text-[11px] tracking-[0.3em] uppercase" style={{ color: MAYA }}>
                     {upcoming.subtitle}
                   </p>
 
-                  <h3 className="font-nunito font-extrabold text-white-soft" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.2rem)' }}>
+                  <h3 className="cine-display text-white-soft" style={{ fontSize: 'clamp(1.9rem, 3.4vw, 2.8rem)' }}>
                     {upcoming.title}
                   </h3>
 
-                  <p className="font-instrument text-cream/75 text-base lg:text-lg leading-relaxed max-w-lg">
+                  <p className="font-lora text-cream/75 text-base lg:text-lg leading-relaxed max-w-lg">
                     {upcoming.description}
                   </p>
 
-                  <div className="flex flex-col gap-3 pl-5" style={{ borderLeft: `2px solid ${MAYA}55` }}>
+                  <div className="flex flex-col gap-3 pl-6" style={{ borderLeft: `1px solid ${MAYA}55` }}>
                     <div className="flex items-center gap-3">
                       <Clock size={13} style={{ color: `${MAYA}99` }} className="flex-shrink-0" />
-                      <span className="font-instrument text-sm text-cream/85">{upcoming.schedule}</span>
+                      <span className="font-instrument text-sm text-cream/85 tracking-wide">{upcoming.schedule}</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <MapPin size={13} style={{ color: `${MAYA}99` }} className="flex-shrink-0" />
-                      <span className="font-instrument text-sm text-cream/85">{upcoming.location}</span>
+                      <span className="font-instrument text-sm text-cream/85 tracking-wide">{upcoming.location}</span>
                     </div>
                     <div className="flex items-center gap-3">
                       <Users size={13} style={{ color: `${MAYA}99` }} className="flex-shrink-0" />
-                      <span className="font-instrument text-sm text-cream/85">Ages {upcoming.ageGroup}</span>
+                      <span className="font-instrument text-sm text-cream/85 tracking-wide">Ages {upcoming.ageGroup}</span>
                     </div>
                   </div>
 
@@ -179,15 +173,15 @@ export default function EventsPage() {
                     {upcoming.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="font-instrument text-[10px] tracking-[0.15em] uppercase px-3 py-1.5 rounded-sm"
-                        style={{ background: `${MAYA}12`, border: `1px solid ${MAYA}40`, color: `${MAYA}cc` }}
+                        className="font-instrument text-[10px] tracking-[0.18em] uppercase px-3.5 py-2 rounded-sm"
+                        style={{ background: `${MAYA}10`, border: `1px solid ${MAYA}35`, color: `${MAYA}cc` }}
                       >
                         {tag}
                       </span>
                     ))}
                   </div>
 
-                  <div className="flex items-center gap-4 pt-2">
+                  <div className="flex items-center gap-5 pt-2">
                     <Link href="/contact" className="btn-primary w-fit">
                       RSVP / Get in Touch
                     </Link>
@@ -206,166 +200,143 @@ export default function EventsPage() {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </Reveal>
 
-          {/* More events placeholder note */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="font-instrument text-sm text-muted mt-8 text-center"
-          >
-            More events announced throughout the year - follow us on Instagram to stay updated.
-          </motion.p>
+          <Reveal direction="up" delay={0.2}>
+            <p className="font-instrument text-sm text-cream/40 mt-10 text-center tracking-wide">
+              More events announced throughout the year - follow us on Instagram to stay updated.
+            </p>
+          </Reveal>
         </div>
       </section>
 
-      {/* ── Upcoming Events ── */}
-      <section className="relative py-20 lg:py-24 overflow-hidden" style={{ background: '#0d0018' }}>
-        <div className="absolute inset-x-0 top-0 h-px" style={{ background: 'linear-gradient(to right, transparent, rgba(181,55,242,0.2), transparent)' }} />
-        <div className="absolute inset-x-0 bottom-0 h-px" style={{ background: 'linear-gradient(to right, transparent, rgba(181,55,242,0.1), transparent)' }} />
+      {/* ── Next Events ── */}
+      <section className="relative py-24 lg:py-28 overflow-hidden" style={{ background: '#0d0018' }}>
+        <div className="film-grain" aria-hidden />
+        <div className="absolute inset-x-0 top-0 h-px" style={{ background: 'linear-gradient(to right, transparent, rgba(222,185,106,0.22), transparent)' }} />
 
-        <div className="relative max-w-[1280px] mx-auto px-5 sm:px-8 lg:px-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-            className="mb-10"
-          >
-            <p className="section-label mb-3">Upcoming</p>
-            <h2 className="font-nunito font-extrabold text-white-soft leading-none" style={{ fontSize: 'clamp(2.4rem, 5vw, 4rem)' }}>
+        <div className="relative z-[3] max-w-[1280px] mx-auto px-5 sm:px-8 lg:px-10">
+          <Reveal direction="up" className="mb-12">
+            <p className="cine-kicker mb-4">Upcoming</p>
+            <h2 className="cine-display text-white-soft" style={{ fontSize: 'clamp(2.6rem, 5.5vw, 4.4rem)' }}>
               Next Events
             </h2>
-          </motion.div>
+          </Reveal>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.1 }}
-            className="py-16 text-center rounded-sm"
-            style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}
-          >
-            <p className="font-instrument text-cream/30 text-sm tracking-[0.06em]">
-              Nothing scheduled right now - follow us on Instagram to be the first to know.
-            </p>
-          </motion.div>
+          <Reveal direction="up" delay={0.12}>
+            <div
+              className="py-20 text-center rounded-sm"
+              style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(222,185,106,0.12)' }}
+            >
+              <p className="font-cormorant italic text-cream/40 text-lg tracking-wide">
+                Nothing scheduled right now - follow us on Instagram to be the first to know.
+              </p>
+            </div>
+          </Reveal>
         </div>
       </section>
 
       {/* ── Past Events ── */}
-      <section className="relative py-20 lg:py-28 overflow-hidden" style={{ background: 'linear-gradient(to bottom, #1a0030 0%, #1f1f22 100%)' }}>
+      <section className="cine-frame relative py-24 lg:py-32 overflow-hidden" style={{ background: 'linear-gradient(to bottom, #14041f 0%, #1a0732 50%, #14041f 100%)' }}>
         <div
-          className="absolute pointer-events-none"
-          style={{
-            top: '30%', left: '15%',
-            width: '500px', height: '500px',
-            background: 'radial-gradient(circle, rgba(181,55,242,0.08) 0%, transparent 65%)',
-            filter: 'blur(60px)',
-            borderRadius: '9999px',
-          }}
+          className="god-ray"
+          style={{ top: '-6%', left: '8%', width: '40%', height: '60%', opacity: 0.6 }}
         />
+        <div className="film-grain" aria-hidden />
 
-        <div className="relative max-w-[1280px] mx-auto px-5 sm:px-8 lg:px-10">
+        <div className="relative z-[3] max-w-[1280px] mx-auto px-5 sm:px-8 lg:px-10">
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-            className="mb-14"
-          >
-            <p className="section-label mb-3">Looking Back</p>
-            <h2 className="font-nunito font-extrabold text-white-soft leading-none" style={{ fontSize: 'clamp(2.4rem, 5vw, 4rem)' }}>
+          <Reveal direction="up" className="mb-16">
+            <p className="cine-kicker mb-4">Looking Back</p>
+            <h2 className="cine-display text-white-soft" style={{ fontSize: 'clamp(2.6rem, 5.5vw, 4.4rem)' }}>
               Past Events
             </h2>
-          </motion.div>
+          </Reveal>
 
-          {PAST_EVENTS.map((event, i) => (
-            <motion.div
-              key={event.title}
-              initial={{ opacity: 0, y: 28 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.75, delay: i * 0.1 }}
-              className="mb-16 last:mb-0"
-            >
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-start">
+          {PAST_EVENTS.map((event) => (
+            <Reveal key={event.title} direction="up" blur duration={1.2} className="mb-16 last:mb-0">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
 
                 {/* Photos */}
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-4">
                   {event.photos.map((photo, j) => (
                     <div
                       key={photo}
-                      className="relative rounded-sm overflow-hidden"
+                      className="relative rounded-sm overflow-hidden group"
                       style={{
-                        aspectRatio: j === 0 ? '3/4' : '3/4',
-                        boxShadow: '0 12px 40px rgba(0,0,0,0.5)',
-                        marginTop: j === 1 ? '2rem' : '0',
+                        aspectRatio: '3/4',
+                        boxShadow: '0 18px 50px rgba(0,0,0,0.55)',
+                        marginTop: j === 1 ? '2.5rem' : '0',
+                        border: '1px solid rgba(222,185,106,0.14)',
                       }}
                     >
                       <Image
                         src={photo}
                         alt={`${event.title} ${j + 1}`}
                         fill
-                        className="object-cover object-center"
+                        className="object-cover object-center transition-transform duration-[1400ms] group-hover:scale-105"
                         sizes="(max-width: 1024px) 50vw, 25vw"
                       />
-                      <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 50%, rgba(13,0,24,0.5) 100%)' }} />
+                      <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 45%, rgba(13,0,24,0.55) 100%)' }} />
                     </div>
                   ))}
                 </div>
 
                 {/* Text */}
-                <div className="flex flex-col gap-6 lg:pt-4">
+                <div className="flex flex-col gap-6 lg:pt-6">
                   <div className="flex items-center gap-3">
-                    <Calendar size={14} style={{ color: 'rgba(181,55,242,0.7)' }} />
-                    <span className="font-instrument text-[11px] tracking-[0.2em] uppercase" style={{ color: 'rgba(181,55,242,0.7)' }}>
+                    <Calendar size={14} style={{ color: 'rgba(222,185,106,0.7)' }} />
+                    <span className="font-instrument text-[11px] tracking-[0.28em] uppercase" style={{ color: 'rgba(222,185,106,0.7)' }}>
                       {event.year}
                     </span>
                   </div>
 
                   <h3
-                    className="font-cormorant font-bold text-white-soft leading-none"
-                    style={{ fontSize: 'clamp(2.4rem, 5vw, 3.6rem)' }}
+                    className="cine-display text-white-soft"
+                    style={{ fontSize: 'clamp(2.4rem, 5vw, 3.8rem)' }}
                   >
                     {event.title}
                   </h3>
 
-                  <p className="font-instrument text-cream/65 text-base lg:text-lg leading-relaxed">
+                  <p className="font-lora text-cream/65 text-base lg:text-lg leading-relaxed">
                     {event.description}
                   </p>
 
-                  {/* Event details */}
+                  {event.scripture && (
+                    <blockquote className="font-cormorant italic text-cream/55 text-lg leading-relaxed pl-5" style={{ borderLeft: '1px solid rgba(222,185,106,0.4)' }}>
+                      &ldquo;{event.scripture.text}&rdquo;
+                      <span className="block font-instrument not-italic text-[11px] tracking-[0.2em] uppercase text-gold/45 mt-2">
+                        {event.scripture.reference}
+                      </span>
+                    </blockquote>
+                  )}
+
                   {(event.location || event.time) && (
                     <div className="flex flex-col gap-2">
                       {event.location && (
                         <div className="flex items-center gap-3">
-                          <MapPin size={13} style={{ color: 'rgba(181,55,242,0.6)' }} className="flex-shrink-0" />
+                          <MapPin size={13} style={{ color: 'rgba(222,185,106,0.6)' }} className="flex-shrink-0" />
                           <span className="font-instrument text-sm text-cream/70">{event.location}</span>
                         </div>
                       )}
                       {event.time && (
                         <div className="flex items-center gap-3">
-                          <Clock size={13} style={{ color: 'rgba(181,55,242,0.6)' }} className="flex-shrink-0" />
+                          <Clock size={13} style={{ color: 'rgba(222,185,106,0.6)' }} className="flex-shrink-0" />
                           <span className="font-instrument text-sm text-cream/70">{event.time}</span>
                         </div>
                       )}
                     </div>
                   )}
 
-                  {/* Program */}
                   {event.program && (
                     <div>
-                      <p className="font-instrument text-[10px] tracking-[0.18em] uppercase text-muted mb-3">Program</p>
+                      <p className="font-instrument text-[10px] tracking-[0.24em] uppercase text-cream/35 mb-3">Program</p>
                       <div className="flex flex-wrap gap-2">
                         {event.program.map((item) => (
                           <span
                             key={item}
-                            className="font-instrument text-[10px] tracking-[0.12em] uppercase px-3 py-1.5 rounded-sm"
-                            style={{ background: 'rgba(181,55,242,0.08)', border: '1px solid rgba(181,55,242,0.2)', color: 'rgba(181,55,242,0.8)' }}
+                            className="font-instrument text-[10px] tracking-[0.14em] uppercase px-3.5 py-2 rounded-sm"
+                            style={{ background: 'rgba(222,185,106,0.07)', border: '1px solid rgba(222,185,106,0.2)', color: 'rgba(222,185,106,0.8)' }}
                           >
                             {item}
                           </span>
@@ -374,49 +345,47 @@ export default function EventsPage() {
                     </div>
                   )}
 
-                  {/* Speakers */}
                   {event.speakers && (
                     <div className="flex flex-col gap-3">
-                      <p className="font-instrument text-[10px] tracking-[0.18em] uppercase text-muted">Featured</p>
+                      <p className="font-instrument text-[10px] tracking-[0.24em] uppercase text-cream/35">Featured</p>
                       {event.speakers.map((s) => (
                         <div key={s.name} className="flex flex-col gap-0.5">
                           <p className="font-instrument text-sm font-semibold text-cream/90">{s.name}</p>
-                          <p className="font-instrument text-xs text-muted leading-snug">{s.role}</p>
+                          <p className="font-instrument text-xs text-cream/45 leading-snug">{s.role}</p>
                         </div>
                       ))}
                     </div>
                   )}
                 </div>
               </div>
-            </motion.div>
+            </Reveal>
           ))}
         </div>
       </section>
 
       {/* ── Stay Connected CTA ── */}
-      <section className="relative py-20 lg:py-24 overflow-hidden" style={{ background: '#FAFAF8' }}>
-        <div className="max-w-[1280px] mx-auto px-5 sm:px-8 lg:px-10">
+      <section className="cine-frame relative py-24 lg:py-32 overflow-hidden" style={{ background: 'linear-gradient(to bottom, #14041f 0%, #0d0018 100%)' }}>
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: 'radial-gradient(ellipse at 30% 40%, rgba(181,55,242,0.12) 0%, transparent 60%)' }}
+        />
+        <div className="film-grain" aria-hidden />
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-            className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-10"
-          >
-            <div className="flex flex-col gap-4">
-              <p className="section-label">Stay in the Loop</p>
+        <div className="relative z-[3] max-w-[1280px] mx-auto px-5 sm:px-8 lg:px-10">
+
+          <Reveal direction="up" className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-12">
+            <div className="flex flex-col gap-5">
+              <p className="cine-kicker">Stay in the Loop</p>
               <h2
-                className="font-nunito font-extrabold text-void leading-tight"
-                style={{ fontSize: 'clamp(1.8rem, 4vw, 3rem)' }}
+                className="cine-display text-white-soft"
+                style={{ fontSize: 'clamp(2rem, 4.5vw, 3.4rem)' }}
               >
                 Never miss an event.
               </h2>
-              <p className="font-instrument text-void/60 text-base lg:text-lg leading-relaxed max-w-lg">
+              <p className="font-lora text-cream/60 text-base lg:text-lg leading-relaxed max-w-lg">
                 Follow us on social media for real-time announcements, behind-the-scenes content, and updates on upcoming gatherings.
               </p>
 
-              {/* Social Links */}
               <div className="flex flex-wrap gap-3 mt-2">
                 {SOCIAL_LINKS.map((link) => (
                   <a
@@ -424,20 +393,15 @@ export default function EventsPage() {
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 font-instrument text-xs tracking-[0.08em] px-4 py-2.5 rounded-sm transition-all duration-200"
-                    style={{
-                      border: '1px solid rgba(31,31,34,0.15)',
-                      color: 'rgba(31,31,34,0.55)',
-                    }}
+                    className="flex items-center gap-2 font-instrument text-xs tracking-[0.08em] px-4 py-3 rounded-sm transition-all duration-300"
+                    style={{ border: '1px solid rgba(245,240,232,0.12)', color: 'rgba(245,240,232,0.5)' }}
                     onMouseEnter={e => {
-                      e.currentTarget.style.borderColor = 'rgba(181,55,242,0.5)'
-                      e.currentTarget.style.color = '#B537F2'
-                      e.currentTarget.style.background = 'rgba(181,55,242,0.05)'
+                      e.currentTarget.style.borderColor = 'rgba(222,185,106,0.5)'
+                      e.currentTarget.style.color = '#DEB96A'
                     }}
                     onMouseLeave={e => {
-                      e.currentTarget.style.borderColor = 'rgba(31,31,34,0.15)'
-                      e.currentTarget.style.color = 'rgba(31,31,34,0.55)'
-                      e.currentTarget.style.background = 'transparent'
+                      e.currentTarget.style.borderColor = 'rgba(245,240,232,0.12)'
+                      e.currentTarget.style.color = 'rgba(245,240,232,0.5)'
                     }}
                   >
                     <SocialIcon icon={link.icon} />
@@ -447,17 +411,17 @@ export default function EventsPage() {
               </div>
             </div>
 
-            {/* Contact CTA */}
             <div
-              className="flex-shrink-0 flex flex-col gap-4 p-8 rounded-sm"
+              className="flex-shrink-0 flex flex-col gap-4 p-9 rounded-sm"
               style={{
-                background: 'linear-gradient(135deg, #1f1f22 0%, #0d0018 100%)',
-                minWidth: '280px',
-                border: '1px solid rgba(181,55,242,0.2)',
+                background: 'linear-gradient(135deg, rgba(31,31,34,0.6) 0%, rgba(13,0,24,0.6) 100%)',
+                minWidth: '300px',
+                border: '1px solid rgba(222,185,106,0.2)',
+                backdropFilter: 'blur(4px)',
               }}
             >
-              <p className="font-instrument text-[10px] tracking-[0.2em] uppercase" style={{ color: 'rgba(181,55,242,0.75)' }}>Got Questions?</p>
-              <h3 className="font-nunito font-bold text-white-soft" style={{ fontSize: '1.3rem' }}>
+              <p className="font-instrument text-[10px] tracking-[0.28em] uppercase text-gold/75">Got Questions?</p>
+              <h3 className="font-cormorant font-semibold text-white-soft text-2xl">
                 We&apos;d love to hear from you.
               </h3>
               <p className="font-instrument text-cream/55 text-sm leading-relaxed">
@@ -465,23 +429,15 @@ export default function EventsPage() {
               </p>
               <Link
                 href="/contact"
-                className="flex items-center gap-2 font-instrument text-sm tracking-[0.06em] px-5 py-3 rounded-sm transition-all duration-200 w-fit"
-                style={{
-                  background: 'rgba(181,55,242,0.15)',
-                  border: '1px solid rgba(181,55,242,0.4)',
-                  color: '#B537F2',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(181,55,242,0.25)'
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'rgba(181,55,242,0.15)'
-                }}
+                className="flex items-center gap-2 font-instrument text-sm tracking-[0.06em] px-5 py-3 rounded-sm transition-all duration-300 w-fit group"
+                style={{ background: 'rgba(222,185,106,0.12)', border: '1px solid rgba(222,185,106,0.4)', color: '#DEB96A' }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(222,185,106,0.22)' }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(222,185,106,0.12)' }}
               >
-                Contact Us <ArrowRight size={14} />
+                Contact Us <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform duration-300" />
               </Link>
             </div>
-          </motion.div>
+          </Reveal>
         </div>
       </section>
     </main>
